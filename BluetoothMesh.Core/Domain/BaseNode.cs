@@ -2,6 +2,7 @@
 
 namespace BluetoothMesh.Core.Domain
 {
+
     public class BaseNode
     {
         /// <summary>
@@ -14,18 +15,31 @@ namespace BluetoothMesh.Core.Domain
         /// listener do nasłuchiwania wysyłanych do niego wiadomości
         /// </summary>
         public Listener Listener { get; set; }
-
+        public List<Listener> SubscribtionsListeners { get; set; } = new List<Listener>();
         /// <summary>
         /// zasięg
         /// </summary>
         public double Range { get; set; } = 10;
         public Posistion Posistion { get; set; }
+        public List<Multicast> Subscribed { get; set; } = new List<Multicast>();
 
-        public BaseNode(int nodeId, Posistion posistion)
+        public BaseNode(int nodeId, Posistion posistion, params Multicast[] multicasts)
         {
             SetNodeId(nodeId);
             Posistion = posistion;
             Listener = new Listener(nodeId);
+            
+            for (int i = 0; i<multicasts.Length; i++)
+            {
+                 Subscribed.Add(multicasts[i]);
+                 if (!multicasts[i].GroupAlreadyIssued)
+                 {
+                     SubscribtionsListeners.Add(new Listener(multicasts[i].GroupId));
+                     multicasts[i].GroupAlreadyIssued = true;
+                 }
+                 multicasts[i].IncrementNumberOfSubscribingNodes();
+            }
+           
         }
 
         public BaseNode(int nodeId, double x, double y)

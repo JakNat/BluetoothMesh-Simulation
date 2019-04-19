@@ -98,6 +98,13 @@ namespace BluetoothMesh.Infrastructure.Configuration
                 Console.WriteLine("CONGRATS!!");
                 return;
             }
+            foreach (Multicast Group in Node.Subscribed)
+            {
+                if (incomingObject.TargetNodeId == Group.GroupId)
+                {
+                    Console.WriteLine("RECEIVED GROUP CAST ON " + Group.GroupName);
+                }
+            }
 
             if (incomingObject.Heartbeats == 0)
             {

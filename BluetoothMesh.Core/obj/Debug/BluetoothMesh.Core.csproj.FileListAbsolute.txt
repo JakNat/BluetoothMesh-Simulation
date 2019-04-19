@@ -8,3 +8,13 @@ C:\Users\bobotb\source\BluetoothMesh\BluetoothMesh.Core\obj\Debug\BluetoothMesh.
 C:\Users\bobotb\source\BluetoothMesh\BluetoothMesh.Core\obj\Debug\BluetoothMesh.Core.csproj.CopyComplete
 C:\Users\bobotb\source\BluetoothMesh\BluetoothMesh.Core\obj\Debug\BluetoothMesh.Core.dll
 C:\Users\bobotb\source\BluetoothMesh\BluetoothMesh.Core\obj\Debug\BluetoothMesh.Core.pdb
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\bin\Debug\BluetoothMesh.Core.dll
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\bin\Debug\BluetoothMesh.Core.pdb
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\bin\Debug\NetworkCommsDotNet.dll
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\bin\Debug\protobuf-net.dll
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\bin\Debug\protobuf-net.xml
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\obj\Debug\BluetoothMesh.Core.csprojAssemblyReference.cache
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\obj\Debug\BluetoothMesh.Core.csproj.CoreCompileInputs.cache
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\obj\Debug\BluetoothMesh.Core.csproj.CopyComplete
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\obj\Debug\BluetoothMesh.Core.dll
+C:\Users\Agata\Desktop\Projekty C#\Bluetooth Mesh\BluetoothMesh-Simulation\BluetoothMesh.Core\obj\Debug\BluetoothMesh.Core.pdb

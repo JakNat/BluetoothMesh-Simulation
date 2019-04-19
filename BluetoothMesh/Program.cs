@@ -26,12 +26,28 @@ namespace BluetoothMesh
             // testowy request 
             BaseRequest baseRequest = new BaseRequest()
             {
-                Heartbeats = 3,
+                Heartbeats = 8,
                 Message = "elo kto pl",
                 TargetNodeId = 7
             };
 
+            BaseRequest multicastBaseRequestA = new BaseRequest()
+            {
+                Heartbeats = 8,
+                Message = "multi król",
+                TargetNodeId = MulticastProvider.ALL_NODES.GroupId
+            };
+
+            BaseRequest multicastBaseRequestB = new BaseRequest()
+            {
+                Heartbeats = 8,
+                Message = "hehe",
+                TargetNodeId = MulticastProvider.KITCHEN.GroupId
+            };
+
             context.NodeServers[0].Send(baseRequest);
+            context.NodeServers[0].Send(multicastBaseRequestA);
+            context.NodeServers[0].Send(multicastBaseRequestB);
 
             Console.WriteLine("\nPress any key to close server.");
             Console.ReadKey(true);
