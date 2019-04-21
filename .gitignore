@@ -350,9 +350,5 @@ healthchecksdb
 MigrationBackup/
 /BluetoothMesh.Infrastructure/obj/Debug/build.force
 .vs/
-/BluetoothMesh/bin
-/BluetoothMesh/obj
-/BluetoothMesh.Infrastructure/bin
-/BluetoothMesh.Infrastructure/obj
-/BluetoothMesh.Core/bin
-/BluetoothMesh.Core/obj
+bin
+obj
