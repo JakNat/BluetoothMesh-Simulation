@@ -1,6 +1,8 @@
 ﻿using BluetoothMesh.Core.Domain;
 using BluetoothMesh.Infrastructure.Configuration;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using System.Linq;
 
 namespace BluetoothMesh.Infrastructure.DBL
 {
@@ -14,22 +16,29 @@ namespace BluetoothMesh.Infrastructure.DBL
         {
             BaseNodes = new List<BaseNode>()
             {
-                new BaseNode(1,new Posistion(1,1)),
-                new BaseNode(2,new Posistion(2,10)),
-                new BaseNode(3,new Posistion(8,6), MulticastProvider.ALL_NODES, MulticastProvider.KITCHEN),
-                new BaseNode(4,new Posistion(16,6)),
-                new BaseNode(5,new Posistion(14,10), MulticastProvider.ALL_NODES),
-                new BaseNode(6,new Posistion(16,18), MulticastProvider.KITCHEN),
-                new BaseNode(7,new Posistion(24,16))
+                new BaseNode(1,new Posistion(1,1), Function.relay),
+                new BaseNode(2,new Posistion(2,10), Function.friend),
+                new BaseNode(3,new Posistion(8,6), Function.relay, MulticastProvider.ALL_NODES, MulticastProvider.KITCHEN),
+                new BaseNode(4,new Posistion(3,13), Function.low_energy),
+                new BaseNode(5,new Posistion(14,10), Function.relay, MulticastProvider.ALL_NODES),
+                new BaseNode(6,new Posistion(16,18), Function.relay, MulticastProvider.KITCHEN),
+                new BaseNode(7,new Posistion(24,16), Function.relay)
             };
 
             NodeCount = 7;
+            GetNodeById(4).SetParentNode(GetNodeById(2));
 
             NodeServers = new List<NodeServer>();
             foreach (var node in BaseNodes)
             {
                 NodeServers.Add(new NodeServer(node));
             }
+        }
+
+        public BaseNode GetNodeById (int id)
+        {
+            BaseNode searchedNode = (BaseNode) BaseNodes.Where(node => node.Id == id).FirstOrDefault();
+            return searchedNode;
         }
 
         public IEnumerable<BaseNode> BaseNodes { get; set; }

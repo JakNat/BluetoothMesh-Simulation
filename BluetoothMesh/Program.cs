@@ -5,7 +5,7 @@ using BluetoothMesh.Infrastructure.DBL;
 using BluetoothMesh.Infrastructure.Repositories;
 using BluetoothMesh.Infrastructure.Services;
 using System;
-using System.Collections.Generic;
+using System.Timers;
 
 namespace BluetoothMesh
 {
@@ -13,7 +13,7 @@ namespace BluetoothMesh
     {
         static void Main(string[] args)
         {
-            var context = new BluetoothMeshContext();
+            var context = BluetoothMeshContextProvider.MAIN_MESH;
             var nodeRepository = new BaseNodeRepository<BaseNode>(context);
             var broadcastService = new BroadcastService(nodeRepository);
 
@@ -45,13 +45,22 @@ namespace BluetoothMesh
                 TargetNodeId = MulticastProvider.KITCHEN.GroupId
             };
 
+            BaseRequest LEBaseRequest = new BaseRequest()
+            {
+                Heartbeats = 8,
+                Message = "low_energy",
+                TargetNodeId = 4
+            };
+
             context.NodeServers[0].Send(baseRequest);
             context.NodeServers[0].Send(multicastBaseRequestA);
             context.NodeServers[0].Send(multicastBaseRequestB);
+            context.NodeServers[0].Send(LEBaseRequest);
 
             Console.WriteLine("\nPress any key to close server.");
             Console.ReadKey(true);
 
         }
+       
     }
 }

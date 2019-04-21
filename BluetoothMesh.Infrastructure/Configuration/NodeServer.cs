@@ -86,9 +86,11 @@ namespace BluetoothMesh.Infrastructure.Configuration
 
             if (ReceivedRequests.Contains(incomingObject.RequestId))
             {
-                Console.WriteLine("Node nr " + Node.Id + " blocked from nr " + incomingObject.BroadCastingNodeId);
+            //    Console.WriteLine("Node nr " + Node.Id + " blocked from nr " + incomingObject.BroadCastingNodeId);
                 return;
             }
+
+            if (Node.Function == Function.low_energy) { return; }
 
             ReceivedRequests.Add(incomingObject.RequestId);
 
@@ -112,9 +114,20 @@ namespace BluetoothMesh.Infrastructure.Configuration
                 return;
             }
 
+            if (Node.Function == Function.friend)
+            {
+                if (Node.FriendNodes.Contains(incomingObject.TargetNodeId))
+                {
+                    Node.MessagesForLowPowerNodes.Add(incomingObject);
+                    Console.WriteLine("GOT MESSAGE FOR LE NODE: " + incomingObject.TargetNodeId + ": " + incomingObject.Message);
+                    return;
+                }
+            }
+
             var newRequest = incomingObject;
             newRequest.Heartbeats--;
             newRequest.BroadCastingNodeId = Node.Id;
+            //System.Threading.Thread.Sleep(2500);
             _broadcastService.SendBroadcast(Node, newRequest);
         }
     }

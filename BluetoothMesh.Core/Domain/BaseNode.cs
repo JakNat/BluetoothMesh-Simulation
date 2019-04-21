@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using BluetoothMesh.Core.Domain.Requests;
+using System.Timers;
 
 namespace BluetoothMesh.Core.Domain
 {
+    public enum Function { friend, low_energy, relay, proxy }
 
     public class BaseNode
     {
@@ -10,24 +13,23 @@ namespace BluetoothMesh.Core.Domain
         /// zakres 0 - 65535
         /// </summary>
         public int Id { get; protected set; }
-
-        /// <summary>
-        /// listener do nasłuchiwania wysyłanych do niego wiadomości
-        /// </summary>
         public Listener Listener { get; set; }
         public List<Listener> SubscribtionsListeners { get; set; } = new List<Listener>();
-        /// <summary>
-        /// zasięg
-        /// </summary>
         public double Range { get; set; } = 10;
         public Posistion Posistion { get; set; }
         public List<Multicast> Subscribed { get; set; } = new List<Multicast>();
 
-        public BaseNode(int nodeId, Posistion posistion, params Multicast[] multicasts)
+        public Function Function { get; set; }
+        public List<int> FriendNodes { get; set; }
+        public List<BaseRequest> MessagesForLowPowerNodes { get; set; }
+        public int PingFrequency { get; set; }
+
+        public BaseNode(int nodeId, Posistion posistion, Function function, params Multicast[] multicasts)
         {
             SetNodeId(nodeId);
             Posistion = posistion;
             Listener = new Listener(nodeId);
+            Function = function;
             
             for (int i = 0; i<multicasts.Length; i++)
             {
@@ -39,7 +41,28 @@ namespace BluetoothMesh.Core.Domain
                  }
                  multicasts[i].IncrementNumberOfSubscribingNodes();
             }
-           
+            NodeFunctionSetter();
+        }
+
+        private void NodeFunctionSetter()
+        {
+            switch (this.Function)
+            {
+                case Function.friend:
+                    this.FriendNodes = new List<int>();
+                    this.MessagesForLowPowerNodes = new List<BaseRequest>();
+                    break;
+                case Function.low_energy:
+                    this.FriendNodes = new List<int>();
+                    this.PingFrequency = 5000;
+                    break;
+            }
+        }
+
+        public void SetParentNode(BaseNode parentNodeId)
+        {
+            this.FriendNodes.Add(parentNodeId.Id);
+            parentNodeId.FriendNodes.Add(this.Id);
         }
 
         public BaseNode(int nodeId, double x, double y)
@@ -58,5 +81,25 @@ namespace BluetoothMesh.Core.Domain
             Id = nodeId;
         }
 
+
+        /*
+        private void TimerSetter()
+        {
+            Timer timer = new Timer();
+            timer.AutoReset = true;
+            timer.Elapsed += new ElapsedEventHandler(PingParentNode);
+            timer.Start();
+        }
+
+        private static void PingParentNode(object sender, ElapsedEventArgs e)
+        {
+            BaseRequest pingRequest = new BaseRequest()
+            {
+                Heartbeats = 8,
+                Message = "daj mi te dane człowieku",
+                TargetNodeId = 2
+            };
+        }
+        */
     }
 }
