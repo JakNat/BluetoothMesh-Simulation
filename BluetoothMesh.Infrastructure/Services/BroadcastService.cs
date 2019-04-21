@@ -23,7 +23,8 @@ namespace BluetoothMesh.Infrastructure.Services
             foreach (var node in nodesInRange)
             {
                 var endPoint = new IPEndPoint(IPAddress.Broadcast, node.Id);
-                UDPConnection.SendObject("BasicMessage", request, endPoint, new SendReceiveOptions<ProtobufSerializer>());
+                // typeof(T).Name -> pobiera nazwe klasy
+                UDPConnection.SendObject(typeof(T).Name, request, endPoint, new SendReceiveOptions<ProtobufSerializer>());
             }
         }
     }

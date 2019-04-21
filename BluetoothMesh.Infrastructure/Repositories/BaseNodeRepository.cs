@@ -21,7 +21,7 @@ namespace BluetoothMesh.Infrastructure.Repositories
 
         public void Add(T baseNode)
         {
-            context.BaseNodes.Append(baseNode);
+            context.BaseNodes.ToList().Add(baseNode);
         }
 
         public T Get(int id)
