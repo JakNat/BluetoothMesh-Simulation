@@ -1,5 +1,5 @@
 ﻿using BluetoothMesh.Core.Domain;
-using BluetoothMesh.Infrastructure.Repositories;
+using BluetoothMesh.Core.Repositories;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections.UDP;
 using NetworkCommsDotNet.DPSBase;
@@ -9,9 +9,9 @@ namespace BluetoothMesh.Infrastructure.Services
 {
     public class BroadcastService : IBroadcastService
     {
-        private readonly BaseNodeRepository<BaseNode> _baseNodeRepository;
+        private readonly IBaseNodeRepository<BaseNode> _baseNodeRepository;
 
-        public BroadcastService(BaseNodeRepository<BaseNode> baseNodeRepository)
+        public BroadcastService(IBaseNodeRepository<BaseNode> baseNodeRepository)
         {
             _baseNodeRepository = baseNodeRepository;
         }

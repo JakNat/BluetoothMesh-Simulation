@@ -1,12 +1,10 @@
 ﻿using BluetoothMesh.Core.Domain;
 using BluetoothMesh.Infrastructure.Configuration;
+using BluetoothMesh.Infrastructure.Services;
 using System.Collections.Generic;
 
 namespace BluetoothMesh.Infrastructure.DBL
 {
-    /// <summary>
-    /// bazowy kontekst aplikacji
-    /// </summary>
     public class BluetoothMeshContext : IBluetoothMeshContext
     {
         public BluetoothMeshContext()
@@ -24,12 +22,13 @@ namespace BluetoothMesh.Infrastructure.DBL
 
             NodeServers = new List<NodeServer>();
             foreach (var node in BaseNodes)
-            {
-                NodeServers.Add(new NodeServer(node));
+            { 
+                var nodeServer = new NodeServer(node);
+                NodeServers.Add(nodeServer);
             }
         }
 
-        public IEnumerable<BaseNode> BaseNodes { get; set; }
+        public List<BaseNode> BaseNodes { get; set; }
 
         public List<NodeServer> NodeServers { get; set; }
     }
