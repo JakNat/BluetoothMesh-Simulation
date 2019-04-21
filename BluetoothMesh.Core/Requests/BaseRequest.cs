@@ -8,6 +8,12 @@ namespace BluetoothMesh.Core.Domain.Requests
     /// ProtoContract służy do automatycznej serializacji i deserializacji obiektu do postaci bajtów 
     /// </summary>
     [ProtoContract]
+
+    //dziedziczenie protobuf
+    // https://nirmalyabhattacharyya.com/2013/09/10/protobuf-net-and-inheritance-hierarchies/
+    [ProtoInclude(100, typeof(GetRequest))]
+    [ProtoInclude(200, typeof(SetRequest))]
+    [ProtoInclude(300, typeof(StatusRequest))]
     public class BaseRequest
     {
         public BaseRequest()
@@ -23,9 +29,6 @@ namespace BluetoothMesh.Core.Domain.Requests
 
         [ProtoMember(3)]
         public int BroadCastingNodeId { get; set; }
-
-        [ProtoMember(4)]
-        public string Message { get; set; }
 
         [ProtoMember(5)]
         public int Heartbeats { get; set; }
