@@ -8,6 +8,7 @@ using BluetoothMesh.Infrastructure.DBL;
 using BluetoothMesh.Infrastructure.Repositories;
 using BluetoothMesh.Infrastructure.Services;
 using System;
+using System.Timers;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -30,12 +31,36 @@ namespace BluetoothMesh
             // testowy request 
             BaseRequest baseRequest = new BaseRequest()
             {
-                Heartbeats = 3,
+                Heartbeats = 8,
                 Message = "elo kto pl",
                 TargetNodeId = 7
             };
 
+            BaseRequest multicastBaseRequestA = new BaseRequest()
+            {
+                Heartbeats = 8,
+                Message = "multi król",
+                TargetNodeId = MulticastProvider.ALL_NODES.GroupId
+            };
+
+            BaseRequest multicastBaseRequestB = new BaseRequest()
+            {
+                Heartbeats = 8,
+                Message = "hehe",
+                TargetNodeId = MulticastProvider.KITCHEN.GroupId
+            };
+
+            BaseRequest LEBaseRequest = new BaseRequest()
+            {
+                Heartbeats = 8,
+                Message = "low_energy",
+                TargetNodeId = 4
+            };
+
             context.NodeServers[0].Send(baseRequest);
+            context.NodeServers[0].Send(multicastBaseRequestA);
+            context.NodeServers[0].Send(multicastBaseRequestB);
+            context.NodeServers[0].Send(LEBaseRequest);
 
             Console.WriteLine("\nPress any key to close server.");
             Console.ReadKey(true);
@@ -64,5 +89,6 @@ namespace BluetoothMesh
 
             return builder.Build();
         }
+       
     }
 }

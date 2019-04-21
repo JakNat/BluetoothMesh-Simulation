@@ -1,4 +1,5 @@
-﻿using BluetoothMesh.Infrastructure.Commands;
+﻿using BluetoothMesh.Core.Domain;
+using BluetoothMesh.Infrastructure.Commands;
 using BluetoothMesh.Infrastructure.Commands.Requests;
 using BluetoothMesh.Infrastructure.Services;
 using System;
@@ -17,31 +18,59 @@ namespace BluetoothMesh.Infrastructure.Handler
         {
             var incomingObject = command.IncomingObject;
             var nodeServer = command.NodeServer;
-              if (nodeServer.ReceivedRequests.Contains(incomingObject.RequestId))
+            var Node = nodeServer.Node;
+            var ReceivedRequests = nodeServer.ReceivedRequests;
+            //to do
+            //if (!Node.SubsribedNodes.Contains(incomingObject.BroadCastingNodeId))
+            //{
+            //    return;
+            //}
+
+            if (ReceivedRequests.Contains(incomingObject.RequestId))
             {
-                Console.WriteLine("Node nr " + nodeServer.Node.Id + " blocked from nr " + incomingObject.BroadCastingNodeId);
-                return ;
+                //    Console.WriteLine("Node nr " + Node.Id + " blocked from nr " + incomingObject.BroadCastingNodeId);
+                return;
             }
 
-            nodeServer.ReceivedRequests.Add(incomingObject.RequestId);
+            if (Node.Function == Function.low_energy) { return; }
 
-            Console.WriteLine("Node nr " + nodeServer.Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeId + "}");
-            if (incomingObject.TargetNodeId == nodeServer.Node.Id)
+            ReceivedRequests.Add(incomingObject.RequestId);
+
+            Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeId + "}");
+            if (incomingObject.TargetNodeId == Node.Id)
             {
                 Console.WriteLine("CONGRATS!!");
-                return ;
+                return;
+            }
+            foreach (Multicast Group in Node.Subscribed)
+            {
+                if (incomingObject.TargetNodeId == Group.GroupId)
+                {
+                    Console.WriteLine("RECEIVED GROUP CAST ON " + Group.GroupName);
+                }
             }
 
             if (incomingObject.Heartbeats == 0)
             {
                 Console.WriteLine("Message died :<");
-                return ;
+                return;
+            }
+
+            if (Node.Function == Function.friend)
+            {
+                if (Node.FriendNodes.Contains(incomingObject.TargetNodeId))
+                {
+                    Node.MessagesForLowPowerNodes.Add(incomingObject);
+                    Console.WriteLine("GOT MESSAGE FOR LE NODE: " + incomingObject.TargetNodeId + ": " + incomingObject.Message);
+                    return;
+                }
             }
 
             var newRequest = incomingObject;
             newRequest.Heartbeats--;
-            newRequest.BroadCastingNodeId = nodeServer.Node.Id;
-            _broadcastService.SendBroadcast(nodeServer.Node, newRequest);
+            newRequest.BroadCastingNodeId = Node.Id;
+            //System.Threading.Thread.Sleep(2500);
+            _broadcastService.SendBroadcast(Node, newRequest);
         }
     }
 }

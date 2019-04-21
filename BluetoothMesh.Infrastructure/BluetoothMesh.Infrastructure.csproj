@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BluetoothMesh.Infrastructure</RootNamespace>
     <AssemblyName>BluetoothMesh.Infrastructure</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -55,6 +56,7 @@
     <Compile Include="Commands\Requests\SendCommand.cs" />
     <Compile Include="Configuration\NodeServer.cs" />
     <Compile Include="DBL\BluetoothMeshContext.cs" />
+    <Compile Include="DBL\BluetoothMeshContextProvider.cs" />
     <Compile Include="DBL\IBluetoothMeshContext.cs" />
     <Compile Include="Handler\BaseRequestHandler.cs" />
     <Compile Include="Handler\SendHandler.cs" />

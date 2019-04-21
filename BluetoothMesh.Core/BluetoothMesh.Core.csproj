@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BluetoothMesh.Core</RootNamespace>
     <AssemblyName>BluetoothMesh.Core</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -52,6 +53,8 @@
   <ItemGroup>
     <Compile Include="Domain\BaseNode.cs" />
     <Compile Include="Domain\Listener.cs" />
+    <Compile Include="Domain\Multicast.cs" />
+    <Compile Include="Domain\MulticastProvider.cs" />
     <Compile Include="Domain\Posistion.cs" />
     <Compile Include="Domain\Requests\BaseRequest.cs" />
     <Compile Include="Domain\Requests\ProtobufSerializer.cs" />
