@@ -6,7 +6,7 @@ using System;
 
 namespace BluetoothMesh.Infrastructure.Handler
 {
-    class BaseRequestHandler : ICommandHandler<BaseRequestCommand>
+    public class BaseRequestHandler : ICommandHandler<BaseRequestCommand>
     {
         private readonly IBroadcastService _broadcastService;
 
@@ -61,7 +61,7 @@ namespace BluetoothMesh.Infrastructure.Handler
                 if (Node.FriendNodes.Contains(incomingObject.TargetNodeId))
                 {
                     Node.MessagesForLowPowerNodes.Add(incomingObject);
-                    Console.WriteLine("GOT MESSAGE FOR LE NODE: " + incomingObject.TargetNodeId + ": " + incomingObject.Message);
+                    Console.WriteLine("GOT MESSAGE FOR LE NODE: " + incomingObject.TargetNodeId + ": "/* + incomingObject.Message*/);
                     return;
                 }
             }
