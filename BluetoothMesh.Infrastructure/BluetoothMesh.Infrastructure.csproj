@@ -67,7 +67,7 @@
     <Compile Include="Handler\SetHandler.cs" />
     <Compile Include="Handler\StatusHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repositories\BaseNodeRepository.cs" />
+    <Compile Include="Repositories\NodeRepository.cs" />
     <Compile Include="Services\BroadcastService.cs" />
     <Compile Include="Services\IBroadcastService.cs" />
   </ItemGroup>

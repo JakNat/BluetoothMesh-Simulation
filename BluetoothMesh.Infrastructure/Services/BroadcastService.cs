@@ -9,14 +9,14 @@ namespace BluetoothMesh.Infrastructure.Services
 {
     public class BroadcastService : IBroadcastService
     {
-        private readonly IBaseNodeRepository<BaseNode> _baseNodeRepository;
+        private readonly INodeRepository<Node> _baseNodeRepository;
 
-        public BroadcastService(IBaseNodeRepository<BaseNode> baseNodeRepository)
+        public BroadcastService(INodeRepository<Node> baseNodeRepository)
         {
             _baseNodeRepository = baseNodeRepository;
         }
 
-        public void SendBroadcast<T>(BaseNode baseNode, T request)
+        public void SendBroadcast<T>(Node baseNode, T request)
         {
             var nodesInRange = _baseNodeRepository.GetAllInRange(baseNode);
 

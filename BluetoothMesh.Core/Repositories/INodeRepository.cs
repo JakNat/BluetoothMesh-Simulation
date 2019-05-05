@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BluetoothMesh.Core.Repositories
 {
-    public interface IBaseNodeRepository<T> : IRepository where T : BaseNode
+    public interface INodeRepository<T> : IRepository where T : Node
     {
         IEnumerable<T> GetAll();
         IEnumerable<T> GetAllInRange(T baseNode);

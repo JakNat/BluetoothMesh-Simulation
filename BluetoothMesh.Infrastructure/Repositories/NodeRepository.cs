@@ -10,11 +10,11 @@ namespace BluetoothMesh.Infrastructure.Repositories
     /// <summary>
     /// Generyczne repo dla nodów 
     /// </summary>
-    public class BaseNodeRepository<T> : IBaseNodeRepository<T> where T : BaseNode
+    public class NodeRepository<T> : INodeRepository<T> where T : Node
     {
         private readonly IBluetoothMeshContext context;
 
-        public BaseNodeRepository(IBluetoothMeshContext context)
+        public NodeRepository(IBluetoothMeshContext context)
         {
             this.context = context;
         }

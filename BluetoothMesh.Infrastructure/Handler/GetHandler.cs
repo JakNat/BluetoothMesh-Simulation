@@ -13,11 +13,11 @@ namespace BluetoothMesh.Infrastructure.Handler
 {
     public class GetHandler : ICommandHandler<GetCommand>
     {
-        private readonly IBaseNodeRepository<BaseNode> _baseNodeRepository;
+        private readonly INodeRepository<Node> _baseNodeRepository;
         private readonly IBroadcastService _broadcastService;
 
         public GetHandler(IBroadcastService broadcastService,
-            IBaseNodeRepository<BaseNode> baseNodeRepository)
+            INodeRepository<Node> baseNodeRepository)
         {
             _baseNodeRepository = baseNodeRepository;
             _broadcastService = broadcastService;

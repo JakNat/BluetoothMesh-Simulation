@@ -6,7 +6,7 @@ namespace BluetoothMesh.Infrastructure.DBL
 {
     public interface IBluetoothMeshContext
     {
-        List<BaseNode> BaseNodes { get; set; }
+        List<Node> BaseNodes { get; set; }
         List<NodeServer> NodeServers { get; set; }
         int NodeCount { get; set; }
     }

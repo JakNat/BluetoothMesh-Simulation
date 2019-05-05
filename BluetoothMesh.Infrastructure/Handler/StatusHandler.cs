@@ -10,10 +10,10 @@ namespace BluetoothMesh.Infrastructure.Handler
     public class StatusHandler : ICommandHandler<StatusCommand>
     {
         private readonly IBroadcastService _broadcastService;
-        private readonly IBaseNodeRepository<BaseNode> _baseNodeRepository;
+        private readonly INodeRepository<Node> _baseNodeRepository;
 
         public StatusHandler(IBroadcastService broadcastService,
-            IBaseNodeRepository<BaseNode> baseNodeRepository)
+            INodeRepository<Node> baseNodeRepository)
         {
             _broadcastService = broadcastService;
             _baseNodeRepository = baseNodeRepository;

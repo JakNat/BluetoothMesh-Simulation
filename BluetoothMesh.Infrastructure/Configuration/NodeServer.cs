@@ -15,13 +15,13 @@ namespace BluetoothMesh.Infrastructure.Configuration
     {
         private ICommandDispatcher _commandDispatcher;
 
-        public NodeServer(BaseNode node)
+        public NodeServer(Node node)
         {
             Node = node;
             RegisterBasicResponse();
         }
 
-        public BaseNode Node { get; set; }
+        public Node Node { get; set; }
         public List<Guid> ReceivedRequests { get; set; } = new List<Guid>();
 
         public void SetDispacher(ICommandDispatcher broadcastService)

@@ -97,7 +97,7 @@ namespace BluetoothMesh
         static IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<BaseNodeRepository<BaseNode>>().As<IBaseNodeRepository<BaseNode>>();
+            builder.RegisterType<NodeRepository<Node>>().As<INodeRepository<Node>>();
             builder.RegisterType<BroadcastService>().As<IBroadcastService>();
 
             builder.RegisterType<BluetoothMeshContext>().As<IBluetoothMeshContext>().SingleInstance();

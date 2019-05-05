@@ -6,7 +6,7 @@ namespace BluetoothMesh.Core.Domain
 {
     public enum Function { friend, low_energy, relay, proxy }
 
-    public class BaseNode
+    public class Node
     {
         /// <summary>
         /// traktujemy node id jako jego numer portu
@@ -24,7 +24,7 @@ namespace BluetoothMesh.Core.Domain
         public List<BaseRequest> MessagesForLowPowerNodes { get; set; }
         public int PingFrequency { get; set; }
 
-        public BaseNode(int nodeId, Posistion posistion, Function function, params Multicast[] multicasts)
+        public Node(int nodeId, Posistion posistion, Function function, params Multicast[] multicasts)
         {
             SetNodeId(nodeId);
             Posistion = posistion;
@@ -59,13 +59,13 @@ namespace BluetoothMesh.Core.Domain
             }
         }
 
-        public void SetParentNode(BaseNode parentNodeId)
+        public void SetParentNode(Node parentNodeId)
         {
             this.FriendNodes.Add(parentNodeId.Id);
             parentNodeId.FriendNodes.Add(this.Id);
         }
 
-        public BaseNode(int nodeId, double x, double y)
+        public Node(int nodeId, double x, double y)
         {
             SetNodeId(nodeId);
             Posistion = new Posistion(x, y);

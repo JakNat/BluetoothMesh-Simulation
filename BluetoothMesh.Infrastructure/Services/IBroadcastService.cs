@@ -4,6 +4,6 @@ namespace BluetoothMesh.Infrastructure.Services
 {
     public interface IBroadcastService
     {
-        void SendBroadcast<T>(BaseNode baseNode, T request);
+        void SendBroadcast<T>(Node baseNode, T request);
     }
 }
