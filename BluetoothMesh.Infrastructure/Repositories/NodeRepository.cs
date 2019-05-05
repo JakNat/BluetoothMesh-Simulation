@@ -10,7 +10,7 @@ namespace BluetoothMesh.Infrastructure.Repositories
     /// <summary>
     /// Generyczne repo dla nodów 
     /// </summary>
-    public class NodeRepository<T> : INodeRepository<T> where T : Node
+    public class NodeRepository<T> : IBaseNodeRepository<T> where T : Node
     {
         private readonly IBluetoothMeshContext context;
 
@@ -21,22 +21,22 @@ namespace BluetoothMesh.Infrastructure.Repositories
 
         public void Add(T baseNode)
         {
-            context.BaseNodes.ToList().Add(baseNode);
+            context.Nodes.ToList().Add(baseNode);
         }
 
         public T Get(int id)
         {
-            return (T)context.BaseNodes.FirstOrDefault(x => x.Id == id);
+            return (T)context.Nodes.FirstOrDefault(x => x.Id == id);
         }
 
         public IEnumerable<T> GetAll()
         {
-            return (IEnumerable<T>)context.BaseNodes;
+            return (IEnumerable<T>)context.Nodes;
         }
 
         public IEnumerable<T> GetAllInRange(T baseNode)
         {
-            return (IEnumerable<T>)context.BaseNodes
+            return (IEnumerable<T>)context.Nodes
                 .Where(x => x.Posistion.DistanceTo(baseNode.Posistion) <= baseNode.Range
                 && x.Id != baseNode.Id);
         }

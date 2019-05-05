@@ -9,9 +9,9 @@ namespace BluetoothMesh.Infrastructure.Services
 {
     public class BroadcastService : IBroadcastService
     {
-        private readonly INodeRepository<Node> _baseNodeRepository;
+        private readonly IBaseNodeRepository<Node> _baseNodeRepository;
 
-        public BroadcastService(INodeRepository<Node> baseNodeRepository)
+        public BroadcastService(IBaseNodeRepository<Node> baseNodeRepository)
         {
             _baseNodeRepository = baseNodeRepository;
         }

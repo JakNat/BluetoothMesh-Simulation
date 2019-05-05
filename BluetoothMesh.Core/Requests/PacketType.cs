@@ -6,8 +6,8 @@ namespace BluetoothMesh.Core.Requests
     {
         public static readonly string BasicMessage = nameof(BaseRequest);
 
-        public static readonly string GET = nameof(GetRequest);
-        public static readonly string SET = nameof(SetRequest);
-        public static readonly string STATUS = nameof(StatusRequest);
+        //public static readonly string GET = nameof(GetRequest);
+        //public static readonly string SET = nameof(SetRequest);
+        //public static readonly string STATUS = nameof(StatusRequest);
     }
 }

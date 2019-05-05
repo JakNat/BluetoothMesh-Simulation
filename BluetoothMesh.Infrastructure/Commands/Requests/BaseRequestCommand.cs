@@ -5,13 +5,13 @@ namespace BluetoothMesh.Infrastructure.Commands.Requests
 {
     public class BaseRequestCommand : ICommand
     {
-        public BaseRequestCommand(NodeServer nodeServer, BaseRequest incomingObject)
+        public BaseRequestCommand(NodeBearer nodeServer, BaseRequest incomingObject)
         {
             NodeServer = nodeServer;
             IncomingObject = incomingObject;
         }
 
-        public NodeServer NodeServer{ get; set; }
+        public NodeBearer NodeServer{ get; set; }
         public BaseRequest IncomingObject{ get; set; }
         
     }

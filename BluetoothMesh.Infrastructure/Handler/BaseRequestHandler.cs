@@ -3,6 +3,7 @@ using BluetoothMesh.Infrastructure.Commands;
 using BluetoothMesh.Infrastructure.Commands.Requests;
 using BluetoothMesh.Infrastructure.Services;
 using System;
+using System.Linq;
 
 namespace BluetoothMesh.Infrastructure.Handler
 {
@@ -20,57 +21,53 @@ namespace BluetoothMesh.Infrastructure.Handler
             var nodeServer = command.NodeServer;
             var Node = nodeServer.Node;
             var ReceivedRequests = nodeServer.ReceivedRequests;
-            //to do
-            //if (!Node.SubsribedNodes.Contains(incomingObject.BroadCastingNodeId))
-            //{
-            //    return;
-            //}
 
             if (ReceivedRequests.Contains(incomingObject.RequestId))
             {
-                //    Console.WriteLine("Node nr " + Node.Id + " blocked from nr " + incomingObject.BroadCastingNodeId);
                 return;
             }
-
-            if (Node.Function == Function.low_energy) { return; }
-
-            ReceivedRequests.Add(incomingObject.RequestId);
-
-            Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeId + "}");
-            if (incomingObject.TargetNodeId == Node.Id)
+            else
             {
-                Console.WriteLine("CONGRATS!!");
-                return;
-            }
-            foreach (Multicast Group in Node.Subscribed)
-            {
-                if (incomingObject.TargetNodeId == Group.GroupId)
-                {
-                    Console.WriteLine("RECEIVED GROUP CAST ON " + Group.GroupName);
-                }
+                ReceivedRequests.Add(incomingObject.RequestId);
             }
 
-            if (incomingObject.Heartbeats == 0)
-            {
-                Console.WriteLine("Message died :<");
-                return;
-            }
+            //Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeAddress.Value + "}");
 
-            if (Node.Function == Function.friend)
+            if (incomingObject.Heartbeats >= 2 && Node.ConfigurationServerModel.Relay)
             {
-                if (Node.FriendNodes.Contains(incomingObject.TargetNodeId))
-                {
-                    Node.MessagesForLowPowerNodes.Add(incomingObject);
-                    Console.WriteLine("GOT MESSAGE FOR LE NODE: " + incomingObject.TargetNodeId + ": "/* + incomingObject.Message*/);
-                    return;
-                }
+                var newRequest = incomingObject;
+                newRequest.Heartbeats--;
+                newRequest.BroadCastingNodeAddress = Node.Address;
+                //System.Threading.Thread.Sleep(2500);
+                _broadcastService.SendBroadcast(Node, newRequest);
             }
+            switch (incomingObject.DST.AddressType)
+            {
+                case AddressType.Unassigned:
+                    break;
+                case AddressType.Unicast:
+                    var element = Node.Elements.Values.FirstOrDefault(x => x.Address.Value == incomingObject.DST.Value);
+                    element?.Models.Where(x => x.Value.Procedures.Contains(incomingObject.Procedure))
+                        .ToList().ForEach(x => x.Value.Dispatch(incomingObject, nodeServer));
+                    break;
+                case AddressType.Virtual:
+                    var model = Node.Elements.SelectMany(el => el.Value.Models.Values)
+                   .FirstOrDefault(m => m.Address.GuidId == incomingObject.DST.GuidId &&
+                   m.Procedures.Contains(incomingObject.Procedure));
 
-            var newRequest = incomingObject;
-            newRequest.Heartbeats--;
-            newRequest.BroadCastingNodeId = Node.Id;
-            //System.Threading.Thread.Sleep(2500);
-            _broadcastService.SendBroadcast(Node, newRequest);
+                    model?.Dispatch(incomingObject, nodeServer);
+                    break;
+                case AddressType.Group:
+                    var allModessls = Node.Elements.SelectMany(el => el.Value.Models);
+                    //var a = allModessls.Where(x => x.SubscriptionList.Exists( y => y.Value == incomingObject.DST.Value));
+                    var allModels = Node.Elements.SelectMany(el => el.Value.Models.Values)
+                        .Where(m => m.SubscriptionList.Exists(a => a.Value == incomingObject.DST.Value) &&
+                        m.Procedures.Contains(incomingObject.Procedure)).ToList();
+                    allModels.ForEach(m => m.Dispatch(incomingObject, nodeServer));
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

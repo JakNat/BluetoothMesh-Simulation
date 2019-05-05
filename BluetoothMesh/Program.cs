@@ -10,6 +10,12 @@ using System;
 using System.Reflection;
 using BluetoothMesh.Infrastructure.Commands.Requests;
 using BluetoothMesh.Infrastructure.Handler;
+using System.Collections.Generic;
+using BluetoothMesh.Core.Domain.Elements;
+using System.Linq;
+using BluetoothMesh.Core.Domain.Models;
+using BluetoothMesh.Core.Domain.Nodes.Elements.Models;
+using System.Threading.Tasks;
 
 namespace BluetoothMesh
 {
@@ -19,6 +25,8 @@ namespace BluetoothMesh
 
         static void Main(string[] args)
         {
+
+            GroupAddressesProvider.SeedList();
             Container = BuildContainer();
             var context = Container.Resolve<IBluetoothMeshContext>();
 
@@ -27,67 +35,124 @@ namespace BluetoothMesh
                 server.SetDispacher(Container.Resolve<ICommandDispatcher>());
             }
 
-            // testowy request 
-            BaseRequest baseRequest = new BaseRequest()
+            Node clientNode = context.Nodes[0];
+            var bearer = context.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 1);
+            ConfigurationClientModel serverModel = (ConfigurationClientModel)clientNode.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
+
+            while (true)
             {
-                Heartbeats = 8,
-                //Message = "elo kto pl",
-                TargetNodeId = 7
-            };
+                Task.WaitAll();
+                Console.WriteLine("-------------MENU:--------------\n" +
+                    "1) Display all nodes\n" +
+                    "2) Send message");
 
-            BaseRequest multicastBaseRequestA = new BaseRequest()
-            {
-                Heartbeats = 8,
-                //Message = "multi król",
-                TargetNodeId = MulticastProvider.ALL_NODES.GroupId
-            };
+                int answer = Convert.ToInt32(Console.ReadLine());
 
-            BaseRequest multicastBaseRequestB = new BaseRequest()
-            {
-                Heartbeats = 8,
-                //Message = "hehe",
-                TargetNodeId = MulticastProvider.KITCHEN.GroupId
-            };
+                switch (answer)
+                {
+                    case 1:
+                        foreach (var node in context.Nodes)
+                        {
+                            Console.WriteLine($"\n-Node nr {node.Id}-----");
+                            Console.WriteLine($"-Node features:");
+                            if (node.ConfigurationServerModel.Relay)
+                                Console.WriteLine($"--Relay");
 
-            BaseRequest LEBaseRequest = new BaseRequest()
-            {
-                Heartbeats = 8,
-                //Message = "low_energy",
-                TargetNodeId = 4
-            };
+                            if (node.ConfigurationServerModel.Friend)
+                                Console.WriteLine($"-Friend");
 
-            //context.NodeServers[0].Send(baseRequest);
-            //context.NodeServers[0].Send(multicastBaseRequestA);
-            //context.NodeServers[0].Send(multicastBaseRequestB);
-         //   context.NodeServers[0].Send(LEBaseRequest);
+                            if (node.ConfigurationServerModel.GATTProxy)
+                                Console.WriteLine($"-Proxy");
 
-            //to do
-            GetRequest getRequest = new GetRequest()
-            {
-                Heartbeats = 8,
-                TargetNodeId = 4
-            };
-            context.NodeServers[0].Send(getRequest);
+                            Console.WriteLine("---Node elements:");
+                            foreach (var elemnt in node.Elements)
+                            {
+                                Console.WriteLine($"---Element nr {elemnt.Value.Address} --- ");
+                                Console.WriteLine($"---Element type {elemnt.Key.ToString()}");
+                                foreach (var model in elemnt.Value.Models)
+                                {
+                                    Console.WriteLine($"-----Model nr {model.Value.Address} --- ");
+                                    Console.WriteLine($"-----Model type {model.Key.ToString()}");
+                                    Console.WriteLine($"-----Model procedures:");
 
-            ////todo
-            //SetRequest setRequest = new SetRequest()
-            //{
-            //    Heartbeats = 8,
-            //    TargetNodeId = 4
-            //};
-            //context.NodeServers[0].Send(setRequest);
-            ////to do
-            //StatusRequest statusRequest = new StatusRequest()
-            //{
-            //    Heartbeats = 8,
-            //    TargetNodeId = 4
-            //};
-            //context.NodeServers[0].Send(getRequest);
+                                    model.Value.Procedures.ForEach(p => Console.WriteLine($"------{p.ToString()}"));
+                                }
+                            }
+                        }
+                        break;
+                    case 2:
+                        var message = new BaseRequest();
+                        Console.WriteLine("\nWhat type of procedure\n");
+                        foreach (string volume in Enum.GetNames(typeof(Procedure)))
+                        {
+                            Console.Write($"{volume} ");
+                        }
+                        string procedureAnswer = Console.ReadLine();
+                        Enum.TryParse(procedureAnswer, out Procedure procedure);
+                        message.Procedure = procedure;
 
+                        Console.WriteLine("\nWhat type of message");
+                        foreach (string volume in Enum.GetNames(typeof(MessageType)))
+                        {
+                            Console.Write($"{volume} ");
+                        }
+                        string messsageTyoeAnswer = Console.ReadLine();
+                        Enum.TryParse(messsageTyoeAnswer, out MessageType messageType);
+                        message.MessageType = messageType;
+                        Console.WriteLine("Parameter:");
+                        message.Parameters = Convert.ToInt32(Console.ReadLine());
 
+                        Console.WriteLine("\nWhat type of address\n");
+                        foreach (string volume in Enum.GetNames(typeof(AddressType)))
+                        {
+                            Console.Write($"{volume} ");
+                        }
+                        string addressAnswer = Console.ReadLine();
+                        Enum.TryParse(addressAnswer, out AddressType addressType);
+                        int addressValue = 0;
+                        switch (addressType)
+                        {
+                            case AddressType.Unassigned:
+                                break;
+                            case AddressType.Unicast:
+                                Console.WriteLine("\nWhich one:\n");
+                                foreach (var node in context.Nodes)
+                                {
+                                    Console.WriteLine($"- {node.Id} : {node.Address.Value}");
+                                }
+                                addressValue = Convert.ToInt32(Console.ReadLine());
+                                message.DST = context.Nodes.Select(x => x.Address).FirstOrDefault(x => x.Value == addressValue);
+                                break;
+                            case AddressType.Virtual:
+                                Console.WriteLine("\n  gl :V   \n");
+                                var a = context.Nodes.SelectMany(x => x.Elements.Values);
+                                foreach (var model in context.Nodes.SelectMany(x => x.Elements.Values).SelectMany(x => x.Models.Values))
+                                {
+                                    Console.WriteLine($"- {model.Address.GuidId} : {model.Address.Value}");
+                                }
+                                addressValue = Convert.ToInt32(Console.ReadLine());
+                                message.DST = context.Nodes.Select(x => x.Address).FirstOrDefault(x => x.Value == addressValue);
+                                break;
+                            case AddressType.Group:
+                                Console.WriteLine("\nWhich one:\n");
+                                foreach (var address in GroupAddressesProvider.Dictionary)
+                                {
+                                    Console.WriteLine($"- {address.Key} : {address.Value.Value}");
+                                }
+                                addressValue = Convert.ToInt32(Console.ReadLine());
+                                message.DST = GroupAddressesProvider.Dictionary.Values.FirstOrDefault(x => x.Value == addressValue);
+                                break;
+                            default:
+                                break;
+                        }
 
-            Console.WriteLine("\nPress any key to close server.");
-            Console.ReadKey(true);
+                        
+
+                        serverModel.SendMessage(bearer,message);
+
+                        break;
+                }
+            }
 
         }
 
@@ -97,7 +162,7 @@ namespace BluetoothMesh
         static IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<NodeRepository<Node>>().As<INodeRepository<Node>>();
+            builder.RegisterType<NodeRepository<Node>>().As<IBaseNodeRepository<Node>>();
             builder.RegisterType<BroadcastService>().As<IBroadcastService>();
 
             builder.RegisterType<BluetoothMeshContext>().As<IBluetoothMeshContext>().SingleInstance();
@@ -112,9 +177,6 @@ namespace BluetoothMesh
                    .AsClosedTypesOf(typeof(ICommandHandler<>))
                    .InstancePerLifetimeScope();
 
-            builder.RegisterType<SendHandler<GetRequest>>().As<ICommandHandler<SendCommand<GetRequest>>>();
-            builder.RegisterType<SendHandler<SetRequest>>().As<ICommandHandler<SendCommand<SetRequest>>>();
-            builder.RegisterType<SendHandler<StatusRequest>>().As<ICommandHandler<SendCommand<StatusRequest>>>();
             builder.RegisterType<SendHandler<BaseRequest>>().As<ICommandHandler<SendCommand<BaseRequest>>>();
 
             builder.RegisterType<CommandDispatcher>()
