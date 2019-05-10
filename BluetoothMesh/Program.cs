@@ -21,13 +21,13 @@ namespace BluetoothMesh
 {
     class Program
     {
-        static IContainer Container { get; set; }
+        static IContainer Container { get; set; } = BuildContainer();
 
         static void Main(string[] args)
         {
 
             GroupAddressesProvider.SeedList();
-            Container = BuildContainer();
+            //Container = BuildContainer();
             var context = Container.Resolve<IBluetoothMeshContext>();
 
             foreach (var server in context.NodeServers)
