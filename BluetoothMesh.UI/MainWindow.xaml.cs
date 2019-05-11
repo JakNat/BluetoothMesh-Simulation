@@ -16,6 +16,15 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Collections.Generic;
 using System.Drawing.Drawing2D;
+using System.Linq;
+using BluetoothMesh.Core.Domain.Nodes.Elements.Models;
+using BluetoothMesh.Core.Domain.Elements;
+using BluetoothMesh.Infrastructure.Configuration;
+using System.ComponentModel;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace BluetoothMesh.UI
 {
@@ -25,171 +34,50 @@ namespace BluetoothMesh.UI
     public partial class MainWindow : Window
     {
 
-        public static IContainer Container { get; set; }
+        public static Autofac.IContainer Container { get; set; }
         public IBluetoothMeshContext mesh;
-        
+        public Node clientNode;
+        public NodeBearer bearer;
+        public ConfigurationClientModel serverModel;
+
 
         int CircleSize = 25;
         int LineThiccccness = 2;
+        
+        public List<int> NodesWithMessages = new List<int>();
+        public List<int> ReceivingNodes = new List<int>();
 
-          
         public MainWindow()
         {
+            GroupAddressesProvider.SeedList();
             Container = BuildContainer();
             mesh = Container.Resolve<IBluetoothMeshContext>();
+
+            foreach (var server in mesh.NodeServers)
+            {
+                server.SetDispacher(Container.Resolve<ICommandDispatcher>());
+            }
+
+            Node clientNode = mesh.Nodes[0];
+            bearer = mesh.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 1);
+            serverModel = (ConfigurationClientModel)clientNode.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
+            
             InitializeComponent();
 
-            //DrawGrid();
-            //DrawConnections();
-            //DrawNodes();
-            //SignNodes();
+            Providers.LayoutProvider.DrawGrid(canvas);
+            Providers.LayoutProvider.DrawGrid(canvas);
+            Providers.LayoutProvider.DrawConnections(canvas, mesh);
+            Providers.LayoutProvider.DrawNodes(canvas, mesh);
+            Providers.LayoutProvider.ColorNodes();
+            Providers.LayoutProvider.SignNodes(canvas, mesh);
 
-            //ChangeNodeColorOnMessage();
+            setup();
         }
 
-        private void DrawNodes()
-        {
-            foreach (Node node in mesh.Nodes)
-            {
-                Ellipse ellipse = new Ellipse() { Width = CircleSize, Height = CircleSize, Fill = Brushes.Blue };
-                canvas.Children.Add(ellipse);
-
-                Canvas.SetLeft(ellipse, node.Posistion.X * 10 - ellipse.Width / 2);
-                Canvas.SetTop(ellipse, node.Posistion.Y * 10 - ellipse.Height / 2);
-
-            }
-        }
-
-        private void SignNodes()
-        {
-            foreach (Node node in mesh.Nodes)
-            {
-                TextBlock textBlock = new TextBlock();
-                textBlock.Text = node.Id.ToString();
-
-                Canvas.SetLeft(textBlock, node.Posistion.X * 10 - CircleSize / 6);
-                Canvas.SetTop(textBlock, node.Posistion.Y * 10 - CircleSize / 3);
-                canvas.Children.Add(textBlock);
-            }
-        }
-
-        private void DrawConnections()
-        {
-            foreach (Node node in mesh.Nodes)
-            {
-                IEnumerable<Node> nodesInRange = mesh.GetAllInRange(node);
-                foreach (Node nodeInRange in nodesInRange)
-                {
-                    Line line = new Line();
-                    line.Stroke = Brushes.Black;
-
-                    line.X1 = node.Posistion.X * 10;
-                    line.X2 = nodeInRange.Posistion.X * 10;
-                    line.Y1 = node.Posistion.Y * 10;
-                    line.Y2 = nodeInRange.Posistion.Y * 10;
-
-                    line.StrokeThickness = LineThiccccness;
-                    canvas.Children.Add(line);
-                }
-            }
-        }
-
-        private Brush ColorPicker(Features features)
-        {
-            int colorFlag = 0;
-            if (features.Friend) { colorFlag = colorFlag + 2; }
-            if (features.Proxy) { colorFlag = colorFlag + 4; }
-            if (features.Relay) { colorFlag = colorFlag + 8; }
-
-            switch (colorFlag)
-            {
-                case 0:
-                    return Brushes.White;
-                case 2:
-                    return Brushes.Aquamarine;
-                case 4:
-                    return Brushes.Gold;
-                case 8:
-                    return Brushes.GreenYellow;
-                case 6:
-                    System.Windows.Media.LinearGradientBrush brush = new System.Windows.Media.LinearGradientBrush();
-                    brush.GradientStops.Add(new GradientStop(Colors.Aquamarine, 0.0));
-                    brush.GradientStops.Add(new GradientStop(Colors.Gold, 1.0));
-                    return brush;
-                default:
-                    return Brushes.White;
-            }
-        }
-
-        private void DrawGrid()
-        {
-            for (int i = 0; i <= 50; i++)
-            {
-                Line line = new Line
-                {
-                    Stroke = Brushes.Gray,
-
-                    X1 = i * 10,
-                    X2 = i * 10,
-                    Y1 = 0,
-                    Y2 = 300,
-
-                    StrokeThickness = 0.5
-                };
-                canvas.Children.Add(line);
-            }
-
-            for (int i = 0; i <= 30; i++)
-            {
-                Line line = new Line
-                {
-                    Stroke = Brushes.Gray,
-
-                    X1 = 0,
-                    X2 = 500,
-                    Y1 = i * 10,
-                    Y2 = i * 10,
-
-                    StrokeThickness = 0.5
-                };
-                canvas.Children.Add(line);
-            }
-        }
+        
 
 
-
-        //private void ChangeNodeColorOnMessage()
-        //{
-        //    foreach (Node node in mesh.Nodes)
-        //    {
-        //        if (node.stateFlag == 1)
-        //        {
-        //            Ellipse ellipse = new Ellipse() { Width = CircleSize, Height = CircleSize, Fill = Brushes.Red };
-        //            canvas.Children.Add(ellipse);
-
-        //            Canvas.SetLeft(ellipse, node.Posistion.X * 10 - ellipse.Width / 2);
-        //            Canvas.SetTop(ellipse, node.Posistion.Y * 10 - ellipse.Height / 2);
-        //        }
-        //    }
-        //}
-
-        //private void IssueMessage_Click(object sender, RoutedEventArgs e)
-        //{
-        //    MessageIssuer();
-        //}
-
-
-        //    private void MessageIssuer()
-        //    {
-        //        BaseRequest baseRequest = new BaseRequest()
-        //        {
-        //            Heartbeats = 8,
-        //            //Message = "elo kto pl",
-        //            TargetNodeId = 7
-        //        };
-        //        //context.NodeServers[0].Send(baseRequest);
-        //    }
-        static IContainer BuildContainer()
+        static Autofac.IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<NodeRepository<Node>>().As<IBaseNodeRepository<Node>>();
@@ -217,5 +105,104 @@ namespace BluetoothMesh.UI
         }
 
 
+
+        private Node GetNodeById(int id)
+        {
+            foreach (Node node in mesh.Nodes)
+            {
+                if (node.Id == id) { return node; }
+            }
+            return null;
+        }
+
+
+        private void IssueMessage_Click(object sender, RoutedEventArgs e)
+        {
+
+            IssueMessage("Friend", "SET", "2", "Unicast", "6");
+            
+        }
+
+        private void IssueMessage(string procedureAnswer, string messageTypeAnswer, string parameterAnswer, string addressTypeAnswer, string addressAnswer)
+        {
+            var message = new BaseRequest();
+            Enum.TryParse(procedureAnswer, out Procedure procedure);
+            message.Procedure = procedure;
+
+            Enum.TryParse(messageTypeAnswer, out MessageType messageType);
+            message.MessageType = messageType;
+            message.Parameters = Convert.ToInt32(parameterAnswer);
+            
+            Enum.TryParse(addressAnswer, out AddressType addressType);
+            int addressValue = 0;
+            switch (addressType)
+            {
+                case AddressType.Unassigned:
+                    break;
+                case AddressType.Unicast:
+                    addressValue = Convert.ToInt32(addressAnswer);
+                    message.DST = mesh.Nodes.Select(x => x.Address).FirstOrDefault(x => x.Value == addressValue);
+                    break;
+                case AddressType.Virtual:
+                    var a = mesh.Nodes.SelectMany(x => x.Elements.Values);
+                    addressValue = Convert.ToInt32(addressAnswer);
+                    message.DST = mesh.Nodes.Select(x => x.Address).FirstOrDefault(x => x.Value == addressValue);
+                    break;
+                case AddressType.Group:
+                    addressValue = Convert.ToInt32(addressAnswer);
+                    message.DST = GroupAddressesProvider.Dictionary.Values.FirstOrDefault(x => x.Value == addressValue);
+                    break;
+                default:
+                    break;
+            }
+            serverModel.SendMessage(bearer, message);
+
+        }
+
+        void Node_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            
+            if (Int32.Parse(e.PropertyName) % 10 == 1)
+            {
+                NodesWithMessages.Add((int)(Int32.Parse(e.PropertyName)) / 10);
+            }
+           
+        }
+        
+        private void DispatcherTimerSetter()
+        {
+            DispatcherTimer dispatcherTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(1500)
+            };
+            dispatcherTimer.Tick += DispatcherTimerTick;
+            dispatcherTimer.Start();
+        }
+
+        private void DispatcherTimerTick(object sender, EventArgs e)
+        {
+            Providers.LayoutProvider.ColorNodes();
+            
+            foreach (var x in NodesWithMessages)
+            {
+                Providers.LayoutProvider.NodeIcons[x - 1].Value.Fill = Brushes.Red;
+            }
+            
+            NodesWithMessages.Clear();
+        }
+
+        void setup()
+        {
+            foreach (Node node in mesh.Nodes)
+            {
+                node.PropertyChanged += Node_PropertyChanged;
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            DispatcherTimerSetter();
+            
+        }
     }
 }

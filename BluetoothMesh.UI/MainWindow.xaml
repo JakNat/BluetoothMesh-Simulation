@@ -5,11 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BluetoothMesh.UI"
         mc:Ignorable="d"
+        Loaded="Window_Loaded"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Canvas x:Name="canvas" Width="500" Height="300" Margin="5, 60, 200, 60">
         </Canvas>
-        <Button  
+        <Button x:Name="button"
+                Click="IssueMessage_Click"
                 Content="issue message" 
                 HorizontalAlignment="Left" 
                 Margin="610,60,0,0" 

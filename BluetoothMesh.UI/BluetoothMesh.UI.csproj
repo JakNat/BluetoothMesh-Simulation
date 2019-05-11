@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{21C6E2A1-D847-49C1-B3AA-78599B18129C}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>BluetoothMesh.UI</RootNamespace>
     <AssemblyName>BluetoothMesh.UI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -34,21 +34,24 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="F2F.ReactiveNavigation, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\F2F.ReactiveNavigation.4.0.1\lib\netstandard2.0\F2F.ReactiveNavigation.dll</HintPath>
+    <Reference Include="F2F.ReactiveNavigation, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\F2F.ReactiveNavigation.4.0.5-alpha\lib\netstandard2.0\F2F.ReactiveNavigation.dll</HintPath>
     </Reference>
-    <Reference Include="F2F.ReactiveNavigation.Autofac, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\F2F.ReactiveNavigation.Autofac.4.0.1\lib\netstandard2.0\F2F.ReactiveNavigation.Autofac.dll</HintPath>
+    <Reference Include="F2F.ReactiveNavigation.Autofac, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\F2F.ReactiveNavigation.Autofac.4.0.5-alpha\lib\netstandard2.0\F2F.ReactiveNavigation.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="F2F.ReactiveNavigation.WPF, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\F2F.ReactiveNavigation.WPF.4.0.1\lib\net461\F2F.ReactiveNavigation.WPF.dll</HintPath>
+    <Reference Include="F2F.ReactiveNavigation.WPF, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\F2F.ReactiveNavigation.WPF.4.0.5-alpha\lib\net461\F2F.ReactiveNavigation.WPF.dll</HintPath>
     </Reference>
-    <Reference Include="F2F.ReactiveNavigation.WPF.Autofac, Version=4.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\F2F.ReactiveNavigation.WPF.Autofac.4.0.1\lib\net461\F2F.ReactiveNavigation.WPF.Autofac.dll</HintPath>
+    <Reference Include="F2F.ReactiveNavigation.WPF.Autofac, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\F2F.ReactiveNavigation.WPF.Autofac.4.0.5-alpha\lib\net461\F2F.ReactiveNavigation.WPF.Autofac.dll</HintPath>
     </Reference>
     <Reference Include="ReactiveUI, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ReactiveUI.8.0.0\lib\net461\ReactiveUI.dll</HintPath>
@@ -101,6 +104,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Providers\LayoutProvider.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

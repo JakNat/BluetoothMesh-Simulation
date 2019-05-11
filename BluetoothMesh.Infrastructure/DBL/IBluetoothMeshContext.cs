@@ -9,6 +9,5 @@ namespace BluetoothMesh.Infrastructure.DBL
         List<Node> Nodes { get; set; }
         List<NodeBearer> NodeServers { get; set; }
         int NodeCount { get; set; }
-        List<Node> GetAllInRange(Node baseNode);
     }
 }

@@ -63,11 +63,5 @@ namespace BluetoothMesh.Infrastructure.DBL
 
         public List<NodeBearer> NodeServers { get; set; }
 
-        public List<Node> GetAllInRange(Node baseNode)
-        {
-            return (List<Node>)Nodes
-                .Where(x => x.Posistion.DistanceTo(baseNode.Posistion) <= baseNode.Range
-                && x.Id != baseNode.Id);
-        }
     }
 }

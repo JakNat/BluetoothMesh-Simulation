@@ -30,8 +30,9 @@ namespace BluetoothMesh.Infrastructure.Handler
             {
                 ReceivedRequests.Add(incomingObject.RequestId);
             }
-
-            //Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeAddress.Value + "}");
+            Node.StatusFlag = 1;
+            System.Threading.Thread.Sleep(1500);
+            Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeAddress.Value + "}");
 
             if (incomingObject.Heartbeats >= 2 && Node.ConfigurationServerModel.Relay)
             {
@@ -68,6 +69,7 @@ namespace BluetoothMesh.Infrastructure.Handler
                 default:
                     break;
             }
+            Node.StatusFlag = 0;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace BluetoothMesh
         {
 
             GroupAddressesProvider.SeedList();
-            //Container = BuildContainer();
+            Container = BuildContainer();
             var context = Container.Resolve<IBluetoothMeshContext>();
 
             foreach (var server in context.NodeServers)
@@ -108,6 +108,7 @@ namespace BluetoothMesh
                             Console.Write($"{volume} ");
                         }
                         string addressAnswer = Console.ReadLine();
+                        Console.WriteLine(addressAnswer);
                         Enum.TryParse(addressAnswer, out AddressType addressType);
                         int addressValue = 0;
                         switch (addressType)
