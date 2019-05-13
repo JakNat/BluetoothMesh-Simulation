@@ -42,12 +42,12 @@ namespace BluetoothMesh.UI.Providers
         public static void Ellipse_Click(object sender, RoutedEventArgs e)
         {
             Ellipse ellipse = (Ellipse)sender;
-            //NodeDetailsWindow newWindow = new NodeDetailsWindow
-            //{
-            //    Node = GetNodeById(Int32.Parse(new string(ellipse.Name[1], 1)))
-            //};
-            //newWindow.Show();
-            //e.Handled = true;
+            NodeDetailsWindow newWindow = new NodeDetailsWindow
+            {
+                Node = GetNodeById(Int32.Parse(new string(ellipse.Name[1], 1)))
+            };
+            newWindow.Show();
+            e.Handled = true;
         }
 
         public static void ColorNodes()
@@ -101,14 +101,13 @@ namespace BluetoothMesh.UI.Providers
         {
             Color friend = Colors.BlueViolet;
             Color proxy = Colors.LightCoral;
-            Color relay = Colors.Gold;
-
+            Color relay = Colors.Gold + Colors.Bisque;
             int colorFlag = 0;
             if (node.ConfigurationServerModel.Friend) { colorFlag = colorFlag + 2; }
             if (node.ConfigurationServerModel.GATTProxy) { colorFlag = colorFlag + 4; }
             if (node.ConfigurationServerModel.Relay) { colorFlag = colorFlag + 8; }
-            System.Windows.Media.LinearGradientBrush brush;
 
+            
             switch (colorFlag)
             {
                 case 0:
@@ -120,26 +119,29 @@ namespace BluetoothMesh.UI.Providers
                 case 8:
                     return Brushes.Gold;
                 case 6:
-                    brush = new System.Windows.Media.LinearGradientBrush();
-                    brush.GradientStops.Add(new GradientStop(friend, 0.0));
-                    brush.GradientStops.Add(new GradientStop(proxy, 1.0));
-                    return brush;
+                    //var brush = new System.Windows.Media.LinearGradientBrush();
+                    //brush.GradientStops.Add(new GradientStop(friend, 0.0));
+                    //brush.GradientStops.Add(new GradientStop(proxy, 1.0));
+                    //return brush;
+                    return Brushes.Cyan;
                 case 10:
-                    brush = new System.Windows.Media.LinearGradientBrush();
-                    brush.GradientStops.Add(new GradientStop(friend, 0.0));
-                    brush.GradientStops.Add(new GradientStop(relay, 1.0));
-                    return brush;
+                    //var brush = new System.Windows.Media.LinearGradientBrush();
+                    //brush.GradientStops.Add(new GradientStop(friend, 0.0));
+                    //brush.GradientStops.Add(new GradientStop(relay, 1.0));
+                    //return brush;
+                    return Brushes.YellowGreen;
                 case 12:
-                    brush = new System.Windows.Media.LinearGradientBrush();
-                    brush.GradientStops.Add(new GradientStop(proxy, 0.0));
-                    brush.GradientStops.Add(new GradientStop(relay, 1.0));
-                    return brush;
+                    //brush = new System.Windows.Media.LinearGradientBrush();
+                    //brush.GradientStops.Add(new GradientStop(proxy, 0.0));
+                    //brush.GradientStops.Add(new GradientStop(relay, 1.0));
+                    return Brushes.PowderBlue;
                 case 14:
-                    brush = new System.Windows.Media.LinearGradientBrush();
-                    brush.GradientStops.Add(new GradientStop(friend, 0.0));
-                    brush.GradientStops.Add(new GradientStop(proxy, 0.5));
-                    brush.GradientStops.Add(new GradientStop(relay, 1.0));
-                    return brush;
+                    //brush = new System.Windows.Media.LinearGradientBrush();
+                    //brush.GradientStops.Add(new GradientStop(friend, 0.0));
+                    //brush.GradientStops.Add(new GradientStop(proxy, 0.5));
+                    //brush.GradientStops.Add(new GradientStop(relay, 1.0));
+                    //return brush;
+                    return Brushes.Aqua;
                 default:
                     return Brushes.White;
             }
@@ -209,6 +211,37 @@ namespace BluetoothMesh.UI.Providers
                 if (pair.Key.Id == id) { return pair.Key; }
             }
             return null;
+        }
+
+        private static DrawingBrush CreateMulticolorBrush()
+        {
+            DrawingBrush myBrush = new DrawingBrush();
+
+            GeometryDrawing backgroundSquare =
+                new GeometryDrawing(
+                    Brushes.White,
+                    null,
+                    new RectangleGeometry(new Rect(0, 0, 100, 100)));
+
+            GeometryGroup aGeometryGroup = new GeometryGroup();
+            aGeometryGroup.Children.Add(new RectangleGeometry(new Rect(0, 0, 50, 50)));
+            aGeometryGroup.Children.Add(new RectangleGeometry(new Rect(50, 50, 50, 50)));
+
+            LinearGradientBrush checkerBrush = new LinearGradientBrush();
+            checkerBrush.GradientStops.Add(new GradientStop(Colors.Black, 0.0));
+            checkerBrush.GradientStops.Add(new GradientStop(Colors.Gray, 1.0));
+
+            GeometryDrawing checkers = new GeometryDrawing(checkerBrush, null, aGeometryGroup);
+
+            DrawingGroup checkersDrawingGroup = new DrawingGroup();
+            checkersDrawingGroup.Children.Add(backgroundSquare);
+            checkersDrawingGroup.Children.Add(checkers);
+
+            myBrush.Drawing = checkersDrawingGroup;
+            myBrush.Viewport = new Rect(0, 0, 0.25, 0.25);
+            myBrush.TileMode = TileMode.Tile;
+
+            return myBrush;
         }
     }
 }

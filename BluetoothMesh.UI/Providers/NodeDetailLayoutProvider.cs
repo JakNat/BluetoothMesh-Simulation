@@ -57,7 +57,7 @@ namespace BluetoothMesh.UI.Providers
                     FontSize = 12,
                     TextAlignment = System.Windows.TextAlignment.Center,
                     Width = width - 10,
-                    BorderBrush = Brushes.White
+                    Height = 200
                 };
                 elementLabels.Add(textBox);
 
@@ -78,11 +78,12 @@ namespace BluetoothMesh.UI.Providers
                 {
                     TextBox textBoxModel = new TextBox
                     {
-                        Text = "Model " + model.Value.Address + "\nModel type: " + model.Key.ToString() +
+                        Text = "Model: \n" + model.Value.Address + "\nModel type: " + model.Key.ToString() +
                                     "\n \n Model procedures: \n" + ModelProceduresProvider(model),
-                        FontSize = 12,
+                        FontSize = 10,
                         TextAlignment = System.Windows.TextAlignment.Center,
-                        Width = currModelWidth - 6
+                        Width = currModelWidth - 10,
+                        Height = 150
                     };
                     currElementModelLabels.Add(textBoxModel);
 

@@ -50,25 +50,25 @@ namespace BluetoothMesh.UI
             Container = BuildContainer();
             mesh = Container.Resolve<IBluetoothMeshContext>();
 
-            //foreach (var server in mesh.NodeServers)
-            //{
-            //    server.SetDispacher(Container.Resolve<ICommandDispatcher>());
-            //}
+            foreach (var server in mesh.NodeServers)
+            {
+                server.SetDispacher(Container.Resolve<ICommandDispatcher>());
+            }
 
-            //Node clientNode = mesh.Nodes[0];
-            //bearer = mesh.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 4);
-            //serverModel = (ConfigurationClientModel)clientNode.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
+            Node clientNode = mesh.Nodes[0];
+            bearer = mesh.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 1);
+            serverModel = (ConfigurationClientModel)clientNode.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
             
             InitializeComponent();
 
-            //Providers.LayoutProvider.DrawGrid(canvas);
-            //Providers.LayoutProvider.DrawGrid(canvas);
-            //Providers.LayoutProvider.DrawConnections(canvas, mesh);
-            //Providers.LayoutProvider.DrawNodes(canvas, mesh);
-            //Providers.LayoutProvider.ColorNodes();
-            //Providers.LayoutProvider.SignNodes(canvas, mesh);
+            Providers.LayoutProvider.DrawGrid(canvas);
+            Providers.LayoutProvider.DrawGrid(canvas);
+            Providers.LayoutProvider.DrawConnections(canvas, mesh);
+            Providers.LayoutProvider.DrawNodes(canvas, mesh);
+            Providers.LayoutProvider.ColorNodes();
+            Providers.LayoutProvider.SignNodes(canvas, mesh);
 
-            //Setup();            
+            Setup();            
         }
 
         
@@ -116,7 +116,7 @@ namespace BluetoothMesh.UI
         private void IssueMessage_Click(object sender, RoutedEventArgs e)
         {
 
-            IssueMessage("Friend", "SET", "2", "Unicast", "1");
+            IssueMessage("Friend", "SET", "2", "Unicast", "7");
             
         }
 
