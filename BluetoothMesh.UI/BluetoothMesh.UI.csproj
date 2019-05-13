@@ -41,23 +41,29 @@
     <Reference Include="Autofac, Version=4.6.2.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
       <HintPath>..\packages\Autofac.4.6.2\lib\net45\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="F2F.ReactiveNavigation, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\F2F.ReactiveNavigation.4.0.5-alpha\lib\netstandard2.0\F2F.ReactiveNavigation.dll</HintPath>
+    <Reference Include="F2F.ReactiveNavigation, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\F2F.ReactiveNavigation.3.0.0\lib\portable-net45+netcore45+wpa81+MonoAndroid1+MonoTouch1\F2F.ReactiveNavigation.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="F2F.ReactiveNavigation.Autofac, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\F2F.ReactiveNavigation.Autofac.4.0.5-alpha\lib\netstandard2.0\F2F.ReactiveNavigation.Autofac.dll</HintPath>
+    <Reference Include="F2F.ReactiveNavigation.Autofac, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\F2F.ReactiveNavigation.Autofac.1.2.0.0\lib\net45\F2F.ReactiveNavigation.Autofac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="F2F.ReactiveNavigation.WPF, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\F2F.ReactiveNavigation.WPF.4.0.5-alpha\lib\net461\F2F.ReactiveNavigation.WPF.dll</HintPath>
+    <Reference Include="F2F.ReactiveNavigation.WPF, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\F2F.ReactiveNavigation.WPF.3.0.0\lib\net45\F2F.ReactiveNavigation.WPF.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="F2F.ReactiveNavigation.WPF.Autofac, Version=4.0.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\F2F.ReactiveNavigation.WPF.Autofac.4.0.5-alpha\lib\net461\F2F.ReactiveNavigation.WPF.Autofac.dll</HintPath>
+    <Reference Include="F2F.ReactiveNavigation.WPF.Autofac, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\F2F.ReactiveNavigation.WPF.Autofac.1.2.0.0\lib\net45\F2F.ReactiveNavigation.WPF.Autofac.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="ReactiveUI, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\ReactiveUI.8.0.0\lib\net461\ReactiveUI.dll</HintPath>
+    <Reference Include="ReactiveUI, Version=7.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\reactiveui-core.7.4.0\lib\Net45\ReactiveUI.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Splat, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Splat.4.0.0\lib\net461\Splat.dll</HintPath>
+    <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Splat.1.6.2\lib\Net45\Splat.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -69,20 +75,25 @@
     </Reference>
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Reactive.Core, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.Core.3.1.1\lib\net46\System.Reactive.Core.dll</HintPath>
+    <Reference Include="System.Reactive.Core, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Core.2.2.5\lib\net45\System.Reactive.Core.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Reactive.Interfaces, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.Interfaces.3.1.1\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+    <Reference Include="System.Reactive.Interfaces, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Interfaces.2.2.5\lib\net45\System.Reactive.Interfaces.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Reactive.Linq, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.Linq.3.1.1\lib\net46\System.Reactive.Linq.dll</HintPath>
+    <Reference Include="System.Reactive.Linq, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-Linq.2.2.5\lib\net45\System.Reactive.Linq.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Reactive.PlatformServices, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.PlatformServices.3.1.1\lib\net46\System.Reactive.PlatformServices.dll</HintPath>
+    <Reference Include="System.Reactive.PlatformServices, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-PlatformServices.2.2.5\lib\net45\System.Reactive.PlatformServices.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="System.Reactive.Windows.Threading, Version=3.0.1000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Reactive.Windows.Threading.3.1.1\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+    <Reference Include="System.Reactive.Windows.Threading, Version=2.2.5.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Rx-XAML.2.2.5\lib\net45\System.Reactive.Windows.Threading.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows" />
@@ -104,7 +115,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="NodeDetailsWindow.xaml.cs">
+      <DependentUpon>NodeDetailsWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Providers\LayoutProvider.cs" />
+    <Compile Include="Providers\NodeDetailLayoutProvider.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -117,6 +132,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="NodeDetailsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

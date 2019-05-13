@@ -25,6 +25,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
+using System.Collections.ObjectModel;
+using BluetoothMesh.UI.Providers;
 
 namespace BluetoothMesh.UI
 {
@@ -32,46 +34,41 @@ namespace BluetoothMesh.UI
     /// Logika interakcji dla klasy MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-
+    {            
         public static Autofac.IContainer Container { get; set; }
         public IBluetoothMeshContext mesh;
         public Node clientNode;
         public NodeBearer bearer;
         public ConfigurationClientModel serverModel;
-
-
-        int CircleSize = 25;
-        int LineThiccccness = 2;
         
         public List<int> NodesWithMessages = new List<int>();
         public List<int> ReceivingNodes = new List<int>();
-
+        
         public MainWindow()
         {
             GroupAddressesProvider.SeedList();
             Container = BuildContainer();
             mesh = Container.Resolve<IBluetoothMeshContext>();
 
-            foreach (var server in mesh.NodeServers)
-            {
-                server.SetDispacher(Container.Resolve<ICommandDispatcher>());
-            }
+            //foreach (var server in mesh.NodeServers)
+            //{
+            //    server.SetDispacher(Container.Resolve<ICommandDispatcher>());
+            //}
 
-            Node clientNode = mesh.Nodes[0];
-            bearer = mesh.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 1);
-            serverModel = (ConfigurationClientModel)clientNode.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
+            //Node clientNode = mesh.Nodes[0];
+            //bearer = mesh.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 4);
+            //serverModel = (ConfigurationClientModel)clientNode.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
             
             InitializeComponent();
 
-            Providers.LayoutProvider.DrawGrid(canvas);
-            Providers.LayoutProvider.DrawGrid(canvas);
-            Providers.LayoutProvider.DrawConnections(canvas, mesh);
-            Providers.LayoutProvider.DrawNodes(canvas, mesh);
-            Providers.LayoutProvider.ColorNodes();
-            Providers.LayoutProvider.SignNodes(canvas, mesh);
+            //Providers.LayoutProvider.DrawGrid(canvas);
+            //Providers.LayoutProvider.DrawGrid(canvas);
+            //Providers.LayoutProvider.DrawConnections(canvas, mesh);
+            //Providers.LayoutProvider.DrawNodes(canvas, mesh);
+            //Providers.LayoutProvider.ColorNodes();
+            //Providers.LayoutProvider.SignNodes(canvas, mesh);
 
-            setup();
+            //Setup();            
         }
 
         
@@ -119,7 +116,7 @@ namespace BluetoothMesh.UI
         private void IssueMessage_Click(object sender, RoutedEventArgs e)
         {
 
-            IssueMessage("Friend", "SET", "2", "Unicast", "6");
+            IssueMessage("Friend", "SET", "2", "Unicast", "1");
             
         }
 
@@ -166,7 +163,11 @@ namespace BluetoothMesh.UI
             {
                 NodesWithMessages.Add((int)(Int32.Parse(e.PropertyName)) / 10);
             }
-           
+            if (Int32.Parse(e.PropertyName) % 10 == 2)
+            {
+                ReceivingNodes.Add((int)(Int32.Parse(e.PropertyName)) / 10);
+            }
+
         }
         
         private void DispatcherTimerSetter()
@@ -182,16 +183,17 @@ namespace BluetoothMesh.UI
         private void DispatcherTimerTick(object sender, EventArgs e)
         {
             Providers.LayoutProvider.ColorNodes();
-            
-            foreach (var x in NodesWithMessages)
+
+            foreach (var x in Providers.LayoutProvider.NodeIcons)
             {
-                Providers.LayoutProvider.NodeIcons[x - 1].Value.Fill = Brushes.Red;
+                if (NodesWithMessages.Contains(x.Key.Id)) { x.Value.Fill = Brushes.Red; }
+                if (ReceivingNodes.Contains(x.Key.Id)) { x.Value.Fill = Brushes.LawnGreen; }
             }
-            
             NodesWithMessages.Clear();
+            ReceivingNodes.Clear();
         }
 
-        void setup()
+        void Setup()
         {
             foreach (Node node in mesh.Nodes)
             {
@@ -202,7 +204,6 @@ namespace BluetoothMesh.UI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             DispatcherTimerSetter();
-            
         }
     }
 }

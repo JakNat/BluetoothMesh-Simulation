@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -28,12 +29,25 @@ namespace BluetoothMesh.UI.Providers
             {
                 Ellipse ellipse = new Ellipse() { Width = CircleSize, Height = CircleSize, Fill = Brushes.White };
                 NodeIcons.Add(new KeyValuePair<Node, Ellipse>(node, ellipse));
+                ellipse.MouseDown += Ellipse_Click;
+                ellipse.Name = "e" + Convert.ToString(node.Id);
                 canvas.Children.Add(ellipse);
 
                 Canvas.SetLeft(ellipse, node.Posistion.X * 10 - ellipse.Width / 2);
                 Canvas.SetTop(ellipse, node.Posistion.Y * 10 - ellipse.Height / 2);
 
             }
+        }
+
+        public static void Ellipse_Click(object sender, RoutedEventArgs e)
+        {
+            Ellipse ellipse = (Ellipse)sender;
+            //NodeDetailsWindow newWindow = new NodeDetailsWindow
+            //{
+            //    Node = GetNodeById(Int32.Parse(new string(ellipse.Name[1], 1)))
+            //};
+            //newWindow.Show();
+            //e.Handled = true;
         }
 
         public static void ColorNodes()
@@ -85,8 +99,8 @@ namespace BluetoothMesh.UI.Providers
 
         public static Brush ColorPicker(Node node)
         {
-            Color friend = Colors.LightBlue;
-            Color proxy = Colors.LightGreen;
+            Color friend = Colors.BlueViolet;
+            Color proxy = Colors.LightCoral;
             Color relay = Colors.Gold;
 
             int colorFlag = 0;
@@ -100,9 +114,9 @@ namespace BluetoothMesh.UI.Providers
                 case 0:
                     return Brushes.White;
                 case 2:
-                    return Brushes.LightBlue;
+                    return Brushes.BlueViolet;
                 case 4:
-                    return Brushes.LightGreen;
+                    return Brushes.LightCoral;
                 case 8:
                     return Brushes.Gold;
                 case 6:
@@ -177,6 +191,24 @@ namespace BluetoothMesh.UI.Providers
                 }
             }
             return result;
+        }
+
+        private static Node GetNodeByPosition(int X, int Y)
+        {
+            foreach (var pair in NodeIcons)
+            {
+                if (pair.Key.Posistion.X == X && pair.Key.Posistion.Y == Y) { return pair.Key; }
+            }
+            return null;
+        }
+
+        private static Node GetNodeById(int id)
+        {
+            foreach (var pair in NodeIcons)
+            {
+                if (pair.Key.Id == id) { return pair.Key; }
+            }
+            return null;
         }
     }
 }

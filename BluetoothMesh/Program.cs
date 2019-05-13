@@ -36,7 +36,7 @@ namespace BluetoothMesh
             }
 
             Node clientNode = context.Nodes[0];
-            var bearer = context.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 1);
+            var bearer = context.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 4);
             ConfigurationClientModel serverModel = (ConfigurationClientModel)clientNode.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
 
             while (true)
@@ -146,7 +146,7 @@ namespace BluetoothMesh
                             default:
                                 break;
                         }
-
+                        Console.WriteLine(message.ToString());
                         
 
                         serverModel.SendMessage(bearer,message);

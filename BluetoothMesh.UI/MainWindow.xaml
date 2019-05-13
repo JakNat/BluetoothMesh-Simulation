@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BluetoothMesh.UI"
+        xmlns:providers="clr-namespace:BluetoothMesh.UI.Providers"
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Title="MainWindow" Height="450" Width="800">
@@ -14,11 +15,16 @@
                 Click="IssueMessage_Click"
                 Content="issue message" 
                 HorizontalAlignment="Left" 
-                Margin="610,60,0,0" 
+                Margin="610,315,0,0" 
                 VerticalAlignment="Top" 
                 Width="100" 
                 Height="45" 
                 RenderTransformOrigin="0.35,-7.111"/>
+        <RadioButton GroupName="ProcedureTypes" Content="DefaultTTL" HorizontalAlignment="Left" Margin="610,50,0,0"  VerticalAlignment="Top" Height="20" Width="100"/>
+
+        <StackPanel HorizontalAlignment="Left" Margin="610,50,0,0"  VerticalAlignment="Top" Height="20" Width="100">
+            <ComboBox Name="ProcedureTypes"/>
+        </StackPanel>
 
     </Grid>
 </Window>
