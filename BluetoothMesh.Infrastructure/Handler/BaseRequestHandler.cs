@@ -30,8 +30,9 @@ namespace BluetoothMesh.Infrastructure.Handler
             {
                 ReceivedRequests.Add(incomingObject.RequestId);
             }
-            Node.StatusFlag = 1;
             System.Threading.Thread.Sleep(1500);
+            Node.StatusFlag = 1;
+            
             Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeAddress.Value + "}");
 
             if (incomingObject.Heartbeats >= 2 && Node.ConfigurationServerModel.Relay)
@@ -39,7 +40,6 @@ namespace BluetoothMesh.Infrastructure.Handler
                 var newRequest = incomingObject;
                 newRequest.Heartbeats--;
                 newRequest.BroadCastingNodeAddress = Node.Address;
-                //System.Threading.Thread.Sleep(2500);
                 _broadcastService.SendBroadcast(Node, newRequest);
             }
             switch (incomingObject.DST.AddressType)

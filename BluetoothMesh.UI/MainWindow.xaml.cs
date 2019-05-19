@@ -112,15 +112,23 @@ namespace BluetoothMesh.UI
             return null;
         }
 
-
+        string parameter;
         private void IssueMessage_Click(object sender, RoutedEventArgs e)
         {
-
-            IssueMessage("Friend", "SET", "2", "Unicast", "7");
+            var issuingNode = IssuingNode.SelectedItem as string;
+            var procedureType = ProcedureTypes.SelectedItem as string;
+            var messageType = MessageTypes.SelectedItem as string;
+            parameter = Parameter.Text;
+            var addressType = AddressTypes.SelectedItem as string;
+            var address = Addresses.SelectedItem as string;
+            Console.WriteLine(procedureType + "\n" + messageType + "\n" + parameter + "\n" + addressType + "\n" + address);
+            //IssueMessage("1", "Friend", "SET", "2", "Unicast", "7");
+            IssueMessage(issuingNode, procedureType, messageType, parameter, addressType, address);
+            
             
         }
 
-        private void IssueMessage(string procedureAnswer, string messageTypeAnswer, string parameterAnswer, string addressTypeAnswer, string addressAnswer)
+        private void IssueMessage(string issuingNodeAnswer, string procedureAnswer, string messageTypeAnswer, string parameterAnswer, string addressTypeAnswer, string addressAnswer)
         {
             var message = new BaseRequest();
             Enum.TryParse(procedureAnswer, out Procedure procedure);
@@ -152,6 +160,11 @@ namespace BluetoothMesh.UI
                 default:
                     break;
             }
+
+            int issuingNode = Int32.Parse(issuingNodeAnswer);
+            Node issuer = GetNodeById(issuingNode);
+            issuer.StatusFlag = 1;
+            bearer = mesh.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == issuingNode);
             serverModel.SendMessage(bearer, message);
 
         }
@@ -204,6 +217,31 @@ namespace BluetoothMesh.UI
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             DispatcherTimerSetter();
+        }
+
+        private void ProcedureTypeComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboboxProvider.ProcedureTypeSetter(sender);
+        }
+
+        private void MessageTypeComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboboxProvider.MessageTypeSetter(sender);
+        }
+
+        private void AddressTypeComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboboxProvider.AddressTypeSetter(sender);
+        }
+
+        private void AddressTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboboxProvider.AddressSetter(sender, Addresses, textDestination, mesh);
+        }
+
+        private void IssuingNodeComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            ComboboxProvider.IssuingNodeSetter(sender, mesh);
         }
     }
 }

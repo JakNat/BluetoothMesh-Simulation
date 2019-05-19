@@ -115,11 +115,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ble.xaml.cs">
+      <DependentUpon>ble.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NodeDetailsWindow.xaml.cs">
       <DependentUpon>NodeDetailsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Providers\ComboboxProvider.cs" />
     <Compile Include="Providers\LayoutProvider.cs" />
     <Compile Include="Providers\NodeDetailLayoutProvider.cs" />
+    <Page Include="ble.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

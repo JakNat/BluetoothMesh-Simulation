@@ -11,6 +11,7 @@
     <Grid>
         <Canvas x:Name="canvas" Width="500" Height="300" Margin="5, 60, 200, 60">
         </Canvas>
+        
         <Button x:Name="button"
                 Click="IssueMessage_Click"
                 Content="issue message" 
@@ -20,11 +21,48 @@
                 Width="100" 
                 Height="45" 
                 RenderTransformOrigin="0.35,-7.111"/>
-        <RadioButton GroupName="ProcedureTypes" Content="DefaultTTL" HorizontalAlignment="Left" Margin="610,50,0,0"  VerticalAlignment="Top" Height="20" Width="100"/>
 
-        <StackPanel HorizontalAlignment="Left" Margin="610,50,0,0"  VerticalAlignment="Top" Height="20" Width="100">
-            <ComboBox Name="ProcedureTypes"/>
+        <StackPanel HorizontalAlignment="Left" Margin="650,50,0,0"  VerticalAlignment="Top" Height="25" Width="100">
+            <ComboBox x:Name="IssuingNode"
+                      Loaded="IssuingNodeComboBox_Loaded"
+                      Height="20"/>
         </StackPanel>
+
+        <StackPanel HorizontalAlignment="Left" Margin="650,80,0,0"  VerticalAlignment="Top" Height="25" Width="100">
+            <ComboBox x:Name="ProcedureTypes"
+                      Loaded="ProcedureTypeComboBox_Loaded"
+                      Height="20"/>
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Left" Margin="650,110,0,0"  VerticalAlignment="Top" Height="25" Width="100">
+            <ComboBox x:Name="MessageTypes"
+                      Loaded="MessageTypeComboBox_Loaded"
+                      Height="20"/>
+        </StackPanel>
+
+        <TextBox x:Name="Parameter" HorizontalAlignment="Left" Margin="650,140,0,0"  VerticalAlignment="Top" Height="20" Width="100"/>
+
+        <StackPanel HorizontalAlignment="Left" Margin="650,170,0,0"  VerticalAlignment="Top" Height="25" Width="100">
+            <ComboBox x:Name="AddressTypes"
+                      Loaded="AddressTypeComboBox_Loaded"
+                      SelectionChanged="AddressTypeComboBox_SelectionChanged"
+                      Height="20"/>
+        </StackPanel>
+
+        <StackPanel HorizontalAlignment="Left" Margin="650,200,0,0"  VerticalAlignment="Top" Height="25" Width="100">
+            <ComboBox x:Name="Addresses"
+                      Visibility="Hidden"
+                      Height="20"/>
+        </StackPanel>
+
+        <TextBox x:Name="textIssuingNode" HorizontalAlignment="Left" Margin="580,50,0,0"  VerticalAlignment="Top" Height="20" Width="70" Text="From node:" BorderBrush="White" IsReadOnly="True"/>
+        <TextBox x:Name="textProcedure" HorizontalAlignment="Left" Margin="580,80,0,0"  VerticalAlignment="Top" Height="20" Width="70" Text="Procedure:" BorderBrush="White" IsReadOnly="True"/>
+        <TextBox x:Name="textMessage" HorizontalAlignment="Left" Margin="580,110,0,0"  VerticalAlignment="Top" Height="20" Width="70" Text="Message:" BorderBrush="White" IsReadOnly="True"/>
+        <TextBox x:Name="textParemeter" HorizontalAlignment="Left" Margin="580,140,0,0"  VerticalAlignment="Top" Height="20" Width="70" Text="Parameter:" BorderBrush="White" IsReadOnly="True"/>
+        <TextBox x:Name="textAddress" HorizontalAlignment="Left" Margin="580,170,0,0"  VerticalAlignment="Top" Height="20" Width="70" Text="Address:" BorderBrush="White" IsReadOnly="True"/>
+        <TextBox x:Name="textDestination" HorizontalAlignment="Left" Margin="580,200,0,0"  VerticalAlignment="Top" Height="20" Width="70" Text="Destination:" BorderBrush="White" IsReadOnly="True" Visibility="Hidden"/>
+        
+
 
     </Grid>
 </Window>
