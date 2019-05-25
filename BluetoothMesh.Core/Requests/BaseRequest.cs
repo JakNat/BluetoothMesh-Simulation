@@ -24,9 +24,19 @@ namespace BluetoothMesh.Core.Domain.Requests
         [ProtoMember(1)]
         public Guid RequestId { get; set; }
 
+        /// <summary> 3.4.4.7
+        /// The DST field is a 16-bit value that identifies the element or elements that this Network PDU is directed towards.
+        /// This address shall be a unicast address, a group address, or a virtual address.
+        /// The DST field is set by the originating node and is untouched by the network layer in nodes operating as a Relay node.
+        /// </summary>
         [ProtoMember(2)]
         public Address DST { get; set; }
 
+
+        /// <summary> 3.4.4.6
+        /// The SRC field is a 16-bit value that identifies the element that originated this Network PDU. This address shall be a unicast address.
+        /// The SRC field is set by the originating element and untouched by nodes operating as a Relay node.
+        /// </summary>
         [ProtoMember(3)]
         public Address SRC { get; set; }
 

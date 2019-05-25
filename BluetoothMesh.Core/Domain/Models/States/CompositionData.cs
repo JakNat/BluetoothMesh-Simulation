@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BluetoothMesh.Core.Domain.Models.States
+﻿namespace BluetoothMesh.Core.Domain.Models.States
 {
     /* 4.2.1
      * The Composition Data state contains information about a node, the elements it includes,
@@ -13,9 +7,18 @@ namespace BluetoothMesh.Core.Domain.Models.States
      */
     public class CompositionData
     {
+        public CompositionData(Features features)
+        {
+            IsFriend = features.Friend;
+            IsProxy = features.Proxy;
+            IsRelay = features.Relay;
+        }
+
         /// <summary>
         /// 4.3
         /// </summary>
-        public ushort Features { get; set; }
+        public bool IsFriend { get; set; }
+        public bool IsProxy { get; set; }
+        public bool IsRelay { get; set; }
     }
 }

@@ -8,9 +8,9 @@ using System.Linq;
 namespace BluetoothMesh.Infrastructure.Repositories
 {
     /// <summary>
-    /// Generyczne repo dla nodów 
+    /// repo dla nodów 
     /// </summary>
-    public class NodeRepository<T> : IBaseNodeRepository<T> where T : Node
+    public class NodeRepository : INodeRepository
     {
         private readonly IBluetoothMeshContext context;
 
@@ -19,29 +19,29 @@ namespace BluetoothMesh.Infrastructure.Repositories
             this.context = context;
         }
 
-        public void Add(T baseNode)
+        public void Add(Node baseNode)
         {
             context.Nodes.ToList().Add(baseNode);
         }
 
-        public T Get(int id)
+        public Node Get(int id)
         {
-            return (T)context.Nodes.FirstOrDefault(x => x.Id == id);
+            return context.Nodes.FirstOrDefault(x => x.Id == id);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<Node> GetAll()
         {
-            return (IEnumerable<T>)context.Nodes;
+            return context.Nodes;
         }
 
-        public IEnumerable<T> GetAllInRange(T baseNode)
+        public IEnumerable<Node> GetAllInRange(Node baseNode)
         {
-            return (IEnumerable<T>)context.Nodes
+            return context.Nodes
                 .Where(x => x.Posistion.DistanceTo(baseNode.Posistion) <= baseNode.Range
                 && x.Id != baseNode.Id);
         }
 
-        public IEnumerable<T> GetAllSubscribed()
+        public IEnumerable<Node> GetAllSubscribed()
         {
             throw new NotImplementedException();
         }

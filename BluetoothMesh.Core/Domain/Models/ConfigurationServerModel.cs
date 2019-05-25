@@ -20,12 +20,8 @@ namespace BluetoothMesh.Core.Domain.Models
     {
         public ConfigurationServerModel(Features features)
         {
-            CompositionData = new CompositionData();
+            CompositionData = new CompositionData(features);
             DefaultTTL = 5;
-            Relay = features.Relay;
-            GATTProxy = features.Proxy;
-            Friend = features.Friend;
-
             Procedures = new List<Procedure>
             {
                 Procedure.DefaultTTL,
@@ -34,20 +30,9 @@ namespace BluetoothMesh.Core.Domain.Models
                 Procedure.Relay,
                 Procedure.SubscriptionList,
             };
-            DefaultTTL = 5;
-            SubscriptionList = new List<Address>()
-            {
-                GroupAddressesProvider.Dictionary[GroupAddresses.AllNodes]
-            };
-
-            if (Relay)
-                SubscriptionList.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllRelays]);
-
-            if (Friend)
-                SubscriptionList.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllFriends]);
-
-            if (GATTProxy)
-                SubscriptionList.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllProxies]);
+            Friend = features.Friend;
+            GATTProxy = features.Proxy;
+            Relay = features.Relay;
         }
 
         public CompositionData CompositionData { get; set; }
@@ -72,11 +57,11 @@ namespace BluetoothMesh.Core.Domain.Models
             {
                 if (value)
                 {
-                    SubscriptionList.AddIfNotExist(GroupAddressesProvider.Dictionary[GroupAddresses.AllRelays]);
+                    //SubscriptionList.AddIfNotExist(GroupAddressesProvider.Dictionary[GroupAddresses.AllRelays]);
                 }
                 else
                 {
-                    SubscriptionList.RemoveAll(x => x.GuidId == GroupAddressesProvider.Dictionary[GroupAddresses.AllRelays].GuidId);
+                    //SubscriptionList.RemoveAll(x => x.GuidId == GroupAddressesProvider.Dictionary[GroupAddresses.AllRelays].GuidId);
                 }
                 _relay = value;
             }
@@ -94,11 +79,11 @@ namespace BluetoothMesh.Core.Domain.Models
             {
                 if (value)
                 {
-                    SubscriptionList.AddIfNotExist(GroupAddressesProvider.Dictionary[GroupAddresses.AllProxies]);
+                    //SubscriptionList.AddIfNotExist(GroupAddressesProvider.Dictionary[GroupAddresses.AllProxies]);
                 }
                 else
                 {
-                    SubscriptionList.RemoveAll(x => x.GuidId == GroupAddressesProvider.Dictionary[GroupAddresses.AllProxies].GuidId);
+                    //SubscriptionList.RemoveAll(x => x.GuidId == GroupAddressesProvider.Dictionary[GroupAddresses.AllProxies].GuidId);
                 }
                 _GATTProxy = value;
             }
@@ -117,11 +102,11 @@ namespace BluetoothMesh.Core.Domain.Models
             {
                 if (value)
                 {
-                    SubscriptionList.AddIfNotExist(GroupAddressesProvider.Dictionary[GroupAddresses.AllFriends]);
+                    //SubscriptionList.AddIfNotExist(GroupAddressesProvider.Dictionary[GroupAddresses.AllFriends]);
                 }
                 else
                 {
-                    SubscriptionList.RemoveAll(x => x.GuidId == GroupAddressesProvider.Dictionary[GroupAddresses.AllFriends].GuidId);
+                    //SubscriptionList.RemoveAll(x => x.GuidId == GroupAddressesProvider.Dictionary[GroupAddresses.AllFriends].GuidId);
                 }
                 _friend = value;
             }
@@ -138,11 +123,8 @@ namespace BluetoothMesh.Core.Domain.Models
                 Procedure = message.Procedure,
                 Heartbeats = node.ConfigurationServerModel.DefaultTTL,
                 MessageType = MessageType.STATUS,
-                SRC = this.Address
+                SRC = new Address(AddressType.Unicast, (ushort)ElementId)
             };
-
-
-
 
             switch (message.Procedure)
             {

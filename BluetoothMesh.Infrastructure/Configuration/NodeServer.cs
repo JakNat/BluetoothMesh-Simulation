@@ -4,6 +4,7 @@ using BluetoothMesh.Core.Domain.Requests;
 using BluetoothMesh.Core.Requests;
 using BluetoothMesh.Infrastructure.Commands;
 using BluetoothMesh.Infrastructure.Commands.Requests;
+using CommonServiceLocator;
 using NetworkCommsDotNet;
 using NetworkCommsDotNet.Connections;
 using System;
@@ -20,6 +21,7 @@ namespace BluetoothMesh.Infrastructure.Configuration
             Node = node;
             RegisterBasicResponse();
         }
+
         public Node Node { get; set; }
         public List<Guid> ReceivedRequests { get; set; } = new List<Guid>();
 
@@ -30,16 +32,19 @@ namespace BluetoothMesh.Infrastructure.Configuration
 
         public void Send<T>(T request) where T : BaseRequest
         {
+            ICommandDispatcher commandDispatcher = (ICommandDispatcher)ServiceLocator.Current.GetInstance(typeof(ICommandDispatcher));
+
             request.BroadCastingNodeAddress = Node.Address;
             var command = new SendCommand<T>(this.Node, request);
-            _commandDispatcher.Dispatch(command);
+            commandDispatcher.Dispatch(command);
         }
 
         #region Packer handler delegates
         public void BasicResponse(PacketHeader packetHeader, Connection connection, BaseRequest incomingObject)
         {
             var command = new BaseRequestCommand(this, incomingObject);
-            _commandDispatcher.Dispatch(command);
+            ICommandDispatcher commandDispatcher = (ICommandDispatcher)ServiceLocator.Current.GetInstance(typeof(ICommandDispatcher));
+            commandDispatcher.Dispatch(command);
         }
 
         #endregion

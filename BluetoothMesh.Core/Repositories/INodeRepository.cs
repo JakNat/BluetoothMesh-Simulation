@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace BluetoothMesh.Core.Repositories
 {
-    public interface IBaseNodeRepository<T> : IRepository where T : Node
+    public interface INodeRepository: IRepository
     {
-        IEnumerable<T> GetAll();
-        IEnumerable<T> GetAllInRange(T baseNode);
-        IEnumerable<T> GetAllSubscribed();
-        T Get(int id);
-        void Add(T baseNode);
+        IEnumerable<Node> GetAll();
+        IEnumerable<Node> GetAllInRange(Node baseNode);
+        IEnumerable<Node> GetAllSubscribed();
+        Node Get(int id);
+        void Add(Node baseNode);
     }
 }

@@ -1,22 +1,18 @@
 ﻿using BluetoothMesh.Core.Domain;
 using BluetoothMesh.Infrastructure.Configuration;
-using BluetoothMesh.Infrastructure.Services;
 using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Linq;
 using BluetoothMesh.Core.Domain.Elements;
-using BluetoothMesh.Core.Domain.Nodes;
 using BluetoothMesh.Core.Domain.Models;
-using System;
 using BluetoothMesh.Core.Domain.Nodes.Elements.Models;
 
 namespace BluetoothMesh.Infrastructure.DBL
 {
     public class BluetoothMeshContext : IBluetoothMeshContext
     {
-        public int NodeCount { get; set; } = 0;
         public BluetoothMeshContext()
         {
+            GroupAddressesProvider.SeedList();
 
             Nodes = new List<Node>()
             {
@@ -35,13 +31,35 @@ namespace BluetoothMesh.Infrastructure.DBL
                 var nodeServer = new NodeBearer(node);
                 NodeServers.Add(nodeServer);
             }
+
+            Nodes[0].Elements[ElementType.primary].Models[ModelType.ConfigurationServer].Procedures.Clear();
+            #region default subscriptions
+
+            Elements.Where(x => x.Models.ContainsKey(ModelType.Light)).ToList().ForEach(x =>
+            x.Subscriptions.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllLights]));
+
+            foreach (var element in Elements.Where(x => x.Models.ContainsKey(ModelType.ConfigurationServer)))
+            {
+                ConfigurationServerModel configurationServer = (ConfigurationServerModel)element.Models[ModelType.ConfigurationServer];
+                if (configurationServer != null)
+                {
+                    if (configurationServer.CompositionData.IsFriend)
+                        element.Subscriptions.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllFriends]);
+                    if (configurationServer.CompositionData.IsRelay)
+                        element.Subscriptions.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllRelays]);
+                    if (configurationServer.CompositionData.IsProxy)
+                        element.Subscriptions.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllProxies]);
+                    element.Subscriptions.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllNodes]);
+                }
+            }
+            #endregion
         }
 
         private static Dictionary<ModelType, Model> GetClient()
         {
             return new Dictionary<ModelType, Model>()
             {
-                {ModelType.ConfigurationClient, new ConfigurationClientModel(){Address = new Address(AddressType.Virtual) } }
+                {ModelType.ConfigurationClient, new ConfigurationClientModel() } 
             };
         }
 
@@ -49,18 +67,13 @@ namespace BluetoothMesh.Infrastructure.DBL
         {
             return new Dictionary<ModelType, Model>()
             {
-                {ModelType.Light, new LightModel(){Address = new Address(AddressType.Virtual) } }
+                {ModelType.Light, new LightModel() }
             };
         }
 
-        public Node GetNodeById (int id)
-        {
-            Node searchedNode = (Node) Nodes.Where(node => node.Id == id).FirstOrDefault();
-            return searchedNode;
-        }
-
-        public List<Node> Nodes { get; set; }
-
         public List<NodeBearer> NodeServers { get; set; }
+        public List<Node> Nodes { get; set; }
+        public IEnumerable<Element> Elements { get { return Nodes.SelectMany(x => x.Elements.Values); } }
+        public IEnumerable<Model> Models { get { return Elements.SelectMany(x => x.Models.Values); } }
     }
 }
