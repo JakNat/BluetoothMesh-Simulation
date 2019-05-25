@@ -14,11 +14,7 @@ namespace BluetoothMesh.Core.Domain.Models
             {
                 Procedure.Light
             };
-            ON = false;
-            SubscriptionList = new List<Address>()
-            {
-                GroupAddressesProvider.Dictionary[GroupAddresses.AllLights]
-            };
+            //SubscriptionList.Add(GroupAddressesProvider.Dictionary[GroupAddresses.AllLights]);
         }
 
 
@@ -26,14 +22,14 @@ namespace BluetoothMesh.Core.Domain.Models
         {
 
             var node = nodeBearer.Node;
-            Console.WriteLine($"Got message LightModel - Nodeid = {node.Id} - Light address = {this.Address}");
+            Console.WriteLine($"Got message LightModel - Nodeid = {node.Id}");
             var status = new BaseRequest()
             {
                 DST = message.SRC,
                 Procedure = message.Procedure,
                 Heartbeats = node.ConfigurationServerModel.DefaultTTL,
                 MessageType = MessageType.STATUS,
-                SRC = this.Address
+                SRC = new Address(AddressType.Unicast,(ushort)ElementId)
             };
 
             switch (message.Procedure)

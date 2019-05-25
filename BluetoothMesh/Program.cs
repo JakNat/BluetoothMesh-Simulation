@@ -10,12 +10,14 @@ using System;
 using System.Reflection;
 using BluetoothMesh.Infrastructure.Commands.Requests;
 using BluetoothMesh.Infrastructure.Handler;
-using System.Collections.Generic;
 using BluetoothMesh.Core.Domain.Elements;
 using System.Linq;
 using BluetoothMesh.Core.Domain.Models;
 using BluetoothMesh.Core.Domain.Nodes.Elements.Models;
 using System.Threading.Tasks;
+using CommonServiceLocator;
+using Autofac.Extras.CommonServiceLocator;
+using System.Diagnostics;
 
 namespace BluetoothMesh
 {
@@ -25,44 +27,35 @@ namespace BluetoothMesh
 
         static void Main(string[] args)
         {
-
-            GroupAddressesProvider.SeedList();
             Container = BuildContainer();
+            
             var context = Container.Resolve<IBluetoothMeshContext>();
 
-            foreach (var server in context.NodeServers)
-            {
-                server.SetDispacher(Container.Resolve<ICommandDispatcher>());
-            }
-
-            Node clientNode = context.Nodes[0];
-            var bearer = context.NodeServers.ToList().FirstOrDefault(x => x.Node.Id == 1);
+            Node clientNode = context.Nodes.ToList()[0];
+            var bearer = context.NodeServers[0];
             ConfigurationClientModel serverModel = (ConfigurationClientModel)clientNode.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
 
-            while (true)
+            while (true)    
             {
-                Task.WaitAll();
                 Console.WriteLine("-------------MENU:--------------\n" +
                     "1) Display all nodes\n" +
                     "2) Send message");
 
-                int answer = Convert.ToInt32(Console.ReadLine());
-
-                switch (answer)
+                switch (Convert.ToInt32(Console.ReadLine()))
                 {
                     case 1:
                         foreach (var node in context.Nodes)
                         {
-                            Console.WriteLine($"\n-Node nr {node.Id}-----");
+                            Console.WriteLine($"\n-Node nr {node.Id}");
                             Console.WriteLine($"-Node features:");
-                            if (node.ConfigurationServerModel.Relay)
+                            if (node.ConfigurationServerModel.CompositionData.IsRelay)
                                 Console.WriteLine($"--Relay");
 
-                            if (node.ConfigurationServerModel.Friend)
-                                Console.WriteLine($"-Friend");
+                            if (node.ConfigurationServerModel.CompositionData.IsFriend)
+                                Console.WriteLine($"--Friend");
 
-                            if (node.ConfigurationServerModel.GATTProxy)
-                                Console.WriteLine($"-Proxy");
+                            if (node.ConfigurationServerModel.CompositionData.IsProxy)
+                                Console.WriteLine($"--Proxy");
 
                             Console.WriteLine("---Node elements:");
                             foreach (var elemnt in node.Elements)
@@ -71,7 +64,7 @@ namespace BluetoothMesh
                                 Console.WriteLine($"---Element type {elemnt.Key.ToString()}");
                                 foreach (var model in elemnt.Value.Models)
                                 {
-                                    Console.WriteLine($"-----Model nr {model.Value.Address} --- ");
+                                    //Console.WriteLine($"-----Model nr {model.Value.Address} --- ");
                                     Console.WriteLine($"-----Model type {model.Key.ToString()}");
                                     Console.WriteLine($"-----Model procedures:");
 
@@ -87,8 +80,8 @@ namespace BluetoothMesh
                         {
                             Console.Write($"{volume} ");
                         }
-                        string procedureAnswer = Console.ReadLine();
-                        Enum.TryParse(procedureAnswer, out Procedure procedure);
+                        Console.Write(":\n");
+                        Enum.TryParse(Console.ReadLine(), out Procedure procedure);
                         message.Procedure = procedure;
 
                         Console.WriteLine("\nWhat type of message");
@@ -99,8 +92,11 @@ namespace BluetoothMesh
                         string messsageTyoeAnswer = Console.ReadLine();
                         Enum.TryParse(messsageTyoeAnswer, out MessageType messageType);
                         message.MessageType = messageType;
-                        Console.WriteLine("Parameter:");
-                        message.Parameters = Convert.ToInt32(Console.ReadLine());
+                        if (MessageType.SET == messageType)
+                        {
+                            Console.WriteLine("Parameter:");
+                            message.Parameters = Convert.ToInt32(Console.ReadLine());
+                        }
 
                         Console.WriteLine("\nWhat type of address\n");
                         foreach (string volume in Enum.GetNames(typeof(AddressType)))
@@ -125,14 +121,14 @@ namespace BluetoothMesh
                                 message.DST = context.Nodes.Select(x => x.Address).FirstOrDefault(x => x.Value == addressValue);
                                 break;
                             case AddressType.Virtual:
-                                Console.WriteLine("\n  gl :V   \n");
-                                var a = context.Nodes.SelectMany(x => x.Elements.Values);
-                                foreach (var model in context.Nodes.SelectMany(x => x.Elements.Values).SelectMany(x => x.Models.Values))
-                                {
-                                    Console.WriteLine($"- {model.Address.GuidId} : {model.Address.Value}");
-                                }
-                                addressValue = Convert.ToInt32(Console.ReadLine());
-                                message.DST = context.Nodes.Select(x => x.Address).FirstOrDefault(x => x.Value == addressValue);
+                                //Console.WriteLine("\n  gl :V   \n");
+                                //var a = context.Nodes.SelectMany(x => x.Elements.Values);
+                                //foreach (var model in context.Nodes.SelectMany(x => x.Elements.Values).SelectMany(x => x.Models.Values))
+                                //{
+                                //    Console.WriteLine($"- {model.Address.GuidId} : {model.Address.Value}");
+                                //}
+                                //addressValue = Convert.ToInt32(Console.ReadLine());
+                                //message.DST = context.Nodes.Select(x => x.Address).FirstOrDefault(x => x.Value == addressValue);
                                 break;
                             case AddressType.Group:
                                 Console.WriteLine("\nWhich one:\n");
@@ -153,6 +149,10 @@ namespace BluetoothMesh
 
                         break;
                 }
+
+                //finish all threads
+                Process thisProc = Process.GetCurrentProcess();
+                ProcessThreadCollection mythreads = thisProc.Threads;
             }
 
         }
@@ -163,11 +163,13 @@ namespace BluetoothMesh
         static IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<NodeRepository<Node>>().As<IBaseNodeRepository<Node>>();
-            builder.RegisterType<BroadcastService>().As<IBroadcastService>();
-
             builder.RegisterType<BluetoothMeshContext>().As<IBluetoothMeshContext>().SingleInstance();
 
+            builder.RegisterType<NodeRepository>().As<INodeRepository>();
+            builder.RegisterType<ElementRepository>().As<IElementRepository>();
+            builder.RegisterType<ModelRepository>().As<IModelRepository<Model>>();
+
+            builder.RegisterType<BroadcastService>().As<IBroadcastService>();
 
             var assembly = typeof(ICommand)
                 .GetTypeInfo()
@@ -184,7 +186,10 @@ namespace BluetoothMesh
                 .As<ICommandDispatcher>()
                 .InstancePerLifetimeScope();
 
-            return builder.Build();
+            var container = builder.Build();
+            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocator(container));
+
+            return container;
         }
        
     }

@@ -57,7 +57,7 @@ namespace BluetoothMesh.Core.Domain.Nodes.Elements.Models
 
         public void SendMessage(INodeBearer nodeBearer, BaseRequest message)
         {
-            message.SRC = this.Address;
+            message.SRC = new Address(AddressType.Unicast, (ushort)ElementId);
             message.Heartbeats = nodeBearer.Node.ConfigurationServerModel.DefaultTTL;
             nodeBearer.Send(message);
         }

@@ -52,17 +52,22 @@ namespace BluetoothMesh.Core.Domain
             Address = new Address(AddressType.Unicast, nodeId);
             Posistion = posistion;
             Listener = new Listener(nodeId);
+
             Elements = new Dictionary<ElementType, Element>()
             {
                 { ElementType.primary, new Element(){ Address = this.Address} }
             };
 
-            var serverModel = new ConfigurationServerModel(features);
-            Elements[ElementType.primary].Models.Add(ModelType.ConfigurationServer, serverModel);
+            var serverModel = new ConfigurationServerModel(features) { ElementId = Elements[ElementType.primary].Address.Value};
+            Elements[ElementType.primary].AddModel(ModelType.ConfigurationServer, serverModel);
 
             if (primaryElementExtensionModels != null)
-                Elements[ElementType.primary].Models.AddRange(primaryElementExtensionModels);
-
+            {
+                foreach (var item in primaryElementExtensionModels)
+                {
+                    Elements[ElementType.primary].AddModel(item.Key, item.Value);
+                }
+            }
             StatusFlag = 0;
         }
     }
