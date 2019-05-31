@@ -4,11 +4,12 @@ using System.Timers;
 using BluetoothMesh.Core.Domain.Elements;
 using BluetoothMesh.Core.Extenions;
 using BluetoothMesh.Core.Domain.Models;
+using System.ComponentModel;
 
 namespace BluetoothMesh.Core.Domain
 {
 
-    public class Node
+    public class Node : INotifyPropertyChanged
     {
         /// <summary>
         /// traktujemy node id jako jego numer portu
@@ -28,6 +29,22 @@ namespace BluetoothMesh.Core.Domain
         public Listener Listener { get; set; }
         public double Range { get; set; } = 10;
         public Posistion Posistion { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private int statusFlag;
+        public int StatusFlag
+        {
+            get { return this.statusFlag; }
+            set
+            {
+                this.statusFlag = value;
+                if (value == 1 || value == 2)
+                {
+                    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(this.Id.ToString() + value.ToString()));
+                }
+            }
+        }
+        
 
         public Node(ushort nodeId, Posistion posistion, Features features, Dictionary<ModelType,Model> primaryElementExtensionModels = null)
         {
@@ -51,8 +68,7 @@ namespace BluetoothMesh.Core.Domain
                     Elements[ElementType.primary].AddModel(item.Key, item.Value);
                 }
             }
-            //if (primaryElementExtensionModels != null)
-            //    Elements[ElementType.primary].Models.AddRange(primaryElementExtensionModels);
+            StatusFlag = 0;
         }
     }
 }

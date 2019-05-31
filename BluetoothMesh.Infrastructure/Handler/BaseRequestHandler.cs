@@ -4,6 +4,7 @@ using BluetoothMesh.Core.Repositories;
 using BluetoothMesh.Infrastructure.Commands;
 using BluetoothMesh.Infrastructure.Commands.Requests;
 using BluetoothMesh.Infrastructure.Services;
+using Caliburn.Micro;
 using System;
 using System.Linq;
 
@@ -14,17 +15,21 @@ namespace BluetoothMesh.Infrastructure.Handler
         private readonly IBroadcastService _broadcastService;
         private readonly IModelRepository<Model> _modelRepository;
         private readonly IElementRepository _elementRepository;
+        private readonly IEventAggregator _eventAggregator;
 
         public BearerLayerHandlers(IBroadcastService broadcastService, IModelRepository<Model> modelRepository,
-            IElementRepository elementRepository)
+            IElementRepository elementRepository, IEventAggregator eventAggregator)
         {
             _broadcastService = broadcastService;
             _modelRepository = modelRepository;
             _elementRepository = elementRepository;
+            _eventAggregator = eventAggregator;
         }
 
         public void Handle(BaseRequestCommand command)
         {
+            var from = command.IncomingObject.BroadCastingNodeAddress;
+            var to = command.NodeServer.Node.Id;
             var incomingObject = command.IncomingObject;
             var nodeServer = command.NodeServer;
             var Node = nodeServer.Node;
@@ -38,6 +43,11 @@ namespace BluetoothMesh.Infrastructure.Handler
             {
                 ReceivedRequests.Add(incomingObject.RequestId);
             }
+            System.Threading.Thread.Sleep(1500);
+            Node.StatusFlag = 1;
+
+            Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeAddress.Value + "}");
+
 
             if (incomingObject.Heartbeats >= 2 
                 && Node.ConfigurationServerModel.Relay 
@@ -73,6 +83,10 @@ namespace BluetoothMesh.Infrastructure.Handler
                 default:
                     break;
             }
+            _eventAggregator.PublishOnUIThread("Node Update");
+            _eventAggregator.PublishOnUIThread(new NodeUpdate() { NodeId = to, From = from });
+
+            Node.StatusFlag = 0;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace BluetoothMesh
 {
     class Program
     {
-        static IContainer Container { get; set; }
+        static IContainer Container { get; set; } = BuildContainer();
 
         static void Main(string[] args)
         {
@@ -104,6 +104,7 @@ namespace BluetoothMesh
                             Console.Write($"{volume} ");
                         }
                         string addressAnswer = Console.ReadLine();
+                        Console.WriteLine(addressAnswer);
                         Enum.TryParse(addressAnswer, out AddressType addressType);
                         int addressValue = 0;
                         switch (addressType)
@@ -141,7 +142,7 @@ namespace BluetoothMesh
                             default:
                                 break;
                         }
-
+                        Console.WriteLine(message.ToString());
                         
 
                         serverModel.SendMessage(bearer,message);

@@ -2,6 +2,7 @@
 using BluetoothMesh.Infrastructure.Commands;
 using BluetoothMesh.Infrastructure.Commands.Requests;
 using BluetoothMesh.Infrastructure.Services;
+using System;
 
 namespace BluetoothMesh.Infrastructure.Handler
 {
