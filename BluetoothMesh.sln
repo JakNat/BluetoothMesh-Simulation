@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluetoothMesh.Infrastructur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluetoothMesh.UI", "BluetoothMesh.UI\BluetoothMesh.UI.csproj", "{21C6E2A1-D847-49C1-B3AA-78599B18129C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BluetoothMesh.UI.MVVM", "BluetoothMesh.UI.MVVM\BluetoothMesh.UI.MVVM.csproj", "{2D511386-FE43-4E64-A03A-19464C60AB7A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{21C6E2A1-D847-49C1-B3AA-78599B18129C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21C6E2A1-D847-49C1-B3AA-78599B18129C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21C6E2A1-D847-49C1-B3AA-78599B18129C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D511386-FE43-4E64-A03A-19464C60AB7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D511386-FE43-4E64-A03A-19464C60AB7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D511386-FE43-4E64-A03A-19464C60AB7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D511386-FE43-4E64-A03A-19464C60AB7A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
