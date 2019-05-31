@@ -75,9 +75,17 @@ namespace BluetoothMesh.Core.Domain
 
         public override bool Equals(object obj)
         {
-            Address objAddress = (Address)obj;
-            return AddressType == AddressType.Virtual ? 
-                GuidId == objAddress.GuidId : Value == objAddress.Value;
+            try
+            {
+                Address objAddress = (Address)obj;
+                return AddressType == AddressType.Virtual ?
+                    GuidId == objAddress.GuidId : Value == objAddress.Value;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+           
         }
     }
 }
