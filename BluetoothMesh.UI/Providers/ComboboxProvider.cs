@@ -78,7 +78,7 @@ namespace BluetoothMesh.UI.Providers
                     dataList = new List<string>();
                     foreach (var model in context.Nodes.SelectMany(x => x.Elements.Values).SelectMany(x => x.Models.Values))
                     {
-                        dataList.Add(model.Address.GuidId.ToString());
+                        //dataList.Add(model.Address.GuidId.ToString());
                     }
                     textTarget.Visibility = System.Windows.Visibility.Visible;
                     target.Visibility = System.Windows.Visibility.Visible;

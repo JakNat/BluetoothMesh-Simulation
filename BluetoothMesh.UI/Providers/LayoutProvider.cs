@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 
 namespace BluetoothMesh.UI.Providers
 {
-    class LayoutProvider
+    public class LayoutProvider
     {
 
         private static int CircleSize = 25;

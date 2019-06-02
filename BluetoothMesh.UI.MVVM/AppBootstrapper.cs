@@ -24,11 +24,6 @@ namespace BluetoothMesh.UI.MVVM
     {
         private static IContainer Container;
 
-        [DllImport("Kernel32")]
-        public static extern void AllocConsole();
-
-        [DllImport("Kernel32", SetLastError = true)]
-        public static extern void FreeConsole();
 
         public AppBootstrapper()
         {
@@ -37,7 +32,6 @@ namespace BluetoothMesh.UI.MVVM
 
         protected override void Configure()
         {
-            AllocConsole();
             var builder = new ContainerBuilder();
 
             //ViewModels

@@ -35,7 +35,7 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
         {
             Node.Posistion.X = PositionX;
             Node.Posistion.Y = PositionY;
-            _nodeRepository.Update(Node);
+            //_nodeRepository.Update(Node);
         }
 
 

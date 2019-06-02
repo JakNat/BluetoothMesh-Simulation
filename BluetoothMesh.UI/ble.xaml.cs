@@ -100,7 +100,7 @@ namespace BluetoothMesh.UI
         static Autofac.IContainer BuildContainer()
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<NodeRepository<Node>>().As<IBaseNodeRepository<Node>>();
+            //builder.RegisterType<NodeRepository<Node>>().As<IBaseNodeRepository<Node>>();
             builder.RegisterType<BroadcastService>().As<IBroadcastService>();
 
             builder.RegisterType<BluetoothMeshContext>().As<IBluetoothMeshContext>().SingleInstance();

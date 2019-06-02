@@ -78,8 +78,8 @@ namespace BluetoothMesh.UI.Providers
                 {
                     TextBox textBoxModel = new TextBox
                     {
-                        Text = "Model: \n" + model.Value.Address + "\nModel type: " + model.Key.ToString() +
-                                    "\n \n Model procedures: \n" + ModelProceduresProvider(model),
+                        //Text = "Model: \n" + model.Value.Address + "\nModel type: " + model.Key.ToString() +
+                        //            "\n \n Model procedures: \n" + ModelProceduresProvider(model),
                         FontSize = 10,
                         TextAlignment = System.Windows.TextAlignment.Center,
                         Width = currModelWidth - 10,

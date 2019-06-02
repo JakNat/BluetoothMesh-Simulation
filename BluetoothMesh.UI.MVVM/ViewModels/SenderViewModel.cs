@@ -110,10 +110,8 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
         #region buttons
         public void IssueMessage()
         {
-            for (int i = 0; i < 30; i++)
-            {
-                System.Threading.Thread.Sleep(100);
-
+            //for (int i = 0; i < 30; i++)
+            //{
 
                 var message = new BaseRequest();
                 message.Procedure = (Procedure)Enum.Parse(typeof(Procedure), SelectedProcedureType);
@@ -127,7 +125,7 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
 
                 ConfigurationClientModel serverModel = (ConfigurationClientModel)n.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
                 serverModel.SendMessage(_context.NodeServers.FirstOrDefault(x => x.Node.Id == SelectedNode.NodeId), message);
-            }
+            //}
         }
         #endregion
     }
