@@ -90,11 +90,8 @@
     <Compile Include="Models\NodeModel.cs" />
     <Compile Include="Models\TextBlockModel.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ViewModels\aaa.cs" />
     <Compile Include="ViewModels\CanvaViewModel.cs" />
     <Compile Include="ViewModels\DragBehavior.cs" />
-    <Compile Include="ViewModels\DragOnCanvasBehavior.cs" />
-    <Compile Include="ViewModels\ItemMovedEvent.cs" />
     <Compile Include="ViewModels\NodeDetailsViewModel.cs" />
     <Compile Include="ViewModels\SenderViewModel.cs" />
     <Compile Include="ViewModels\ShellViewModel.cs" />

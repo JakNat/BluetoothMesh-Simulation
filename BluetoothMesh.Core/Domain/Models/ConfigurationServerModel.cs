@@ -118,7 +118,7 @@ namespace BluetoothMesh.Core.Domain.Models
             var node = nodeBearer.Node;
             Console.WriteLine($"Got message ConfigurationServerModel - Nodeid = {node.Id}");
             node.StatusFlag = 2;
-            System.Threading.Thread.Sleep(1500);
+            System.Threading.Thread.Sleep(100);
             node.StatusFlag = 0;
             var status = new BaseRequest()
             {
