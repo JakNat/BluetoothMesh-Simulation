@@ -12,7 +12,7 @@ using System.Windows.Media;
 
 namespace BluetoothMesh.UI.MVVM.ViewModels
 {
-    public class CanvaViewModel : Screen, IHandle<NodeUpdate>
+    public class CanvaViewModel : Screen, IHandle<NodeUpdate>, IHandle<ClearPathEvent>
     {
         public static Node PickedNode;
 
@@ -133,40 +133,17 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
 
         public void Handle(NodeUpdate message)
         {
-            if (message.From.Value == 1)
-            {
-                path.Clear();
-            }
+           
             Draw();
+            //System.Threading.Thread.Sleep(10);
+
             if (message.From != null)
             {
+
                 var actualNode = MyNodes.FirstOrDefault(x => x.Id == message.NodeId);
-            actualNode.Height += 5;
-            actualNode.Width += 5;
+                actualNode.Height += 5;
+                actualNode.Width += 5;
 
-            //MyNodes = new ObservableCollection<EllipseModel>();
-            //TextBlockModels = new ObservableCollection<TextBlockModel>();
-            //foreach (var node in _nodeRepository.GetAll())
-            //{
-            //    var mynode = new EllipseModel(node);
-            //    TextBlockModel textBlock = new TextBlockModel
-            //    {
-            //        Text = node.Id.ToString(),
-            //        X = node.Posistion.X * 10 - mynode.Height / 6,
-            //        Y = node.Posistion.Y * 10 - mynode.Height / 3
-            //    };
-            //    TextBlockModels.Add(textBlock);
-
-            //    mynode.Fill = LayoutProvider.ColorPicker(node);
-            //    if (message.NodeId == node.Id)
-            //    {
-            //        mynode.Height += 5;
-            //        mynode.Width += 5;
-            //    }
-            //    MyNodes.Add(mynode);
-            //}
-            //seedMyLines();
-           
                 var nodeFrom = MyNodes.FirstOrDefault(x => x.Name == Convert.ToString(message.From.Value));
                 var nodeTo = MyNodes.FirstOrDefault(x => x.Name == Convert.ToString(message.NodeId));
 
@@ -184,6 +161,11 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
                 path.Add(line);
                 MyLines.Add(line);
             }
+        }
+
+        public void Handle(ClearPathEvent message)
+        {
+            path.Clear();
         }
     }
 }

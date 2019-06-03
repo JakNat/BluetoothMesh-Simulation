@@ -36,9 +36,18 @@ namespace BluetoothMesh.Infrastructure.Repositories
 
         public IEnumerable<Node> GetAllInRange(Node baseNode)
         {
-            return context.Nodes
-                .Where(x => x.Posistion.DistanceTo(baseNode.Posistion) <= baseNode.Range
-                && x.Id != baseNode.Id);
+            var pickedNodes = new List<Node>();
+            foreach (var node in context.Nodes.Where(x => x.Id != baseNode.Id))
+            {
+                var distance = baseNode.Posistion.DistanceTo(node.Posistion);
+                var probability = 1 / ((Math.Pow(distance,2)) / 200 + 1) * 100;
+                if (new Random().Next(100) <= probability)
+                {
+                    pickedNodes.Add(node);
+                }
+            }
+
+            return pickedNodes;
         }
 
         public IEnumerable<Node> GetAllSubscribed()

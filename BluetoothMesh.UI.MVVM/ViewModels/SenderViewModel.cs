@@ -18,8 +18,9 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
         private readonly INodeRepository _nodeRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly IBluetoothMeshContext _context;
+        private readonly IEventAggregator eventAggregator;
 
-        public SenderViewModel(INodeRepository nodeRepository, IAddressRepository addressRepository, IBluetoothMeshContext context)
+        public SenderViewModel(INodeRepository nodeRepository, IAddressRepository addressRepository, IBluetoothMeshContext context, IEventAggregator eventAggregator)
         {
             _nodeRepository = nodeRepository;
             Nodes = new List<NodeModel>();
@@ -27,6 +28,12 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
             nodeRepository.GetAll().ToList().ForEach(x => Nodes.Add(new NodeModel(x)));
             _addressRepository = addressRepository;
             _context = context;
+            this.eventAggregator = eventAggregator;
+
+            SelectedNode = new NodeModel(nodeRepository.Get(1));
+            SelectedProcedureType = Procedure.DefaultTTL.ToString();
+            SelectedMessageType = MessageType.GET.ToString();
+
         }
 
         public List<NodeModel> Nodes { get; set; }
@@ -110,6 +117,7 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
         #region buttons
         public void IssueMessage()
         {
+            eventAggregator.PublishOnUIThread(new ClearPathEvent());
             //for (int i = 0; i < 30; i++)
             //{
 
