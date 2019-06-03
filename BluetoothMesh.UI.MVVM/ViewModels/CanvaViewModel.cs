@@ -66,7 +66,9 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
 
             foreach (var node in _nodeRepository.GetAll())
             {
+
                 var mynode = new EllipseModel(node);
+                var x = _nodeRepository.GetAll();
                 TextBlockModel textBlock = new TextBlockModel
                 {
                     Text = node.Id.ToString(),
@@ -133,7 +135,6 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
 
         public void Handle(NodeUpdate message)
         {
-           
             Draw();
             //System.Threading.Thread.Sleep(10);
 

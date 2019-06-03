@@ -13,12 +13,14 @@ using System.Windows;
 
 namespace BluetoothMesh.UI.MVVM.ViewModels
 {
-    public class SenderViewModel : Screen
+    public class SenderViewModel : Screen, IHandle<SuccessfulMessage>
     {
         private readonly INodeRepository _nodeRepository;
         private readonly IAddressRepository _addressRepository;
         private readonly IBluetoothMeshContext _context;
         private readonly IEventAggregator eventAggregator;
+
+        public int SuccedMessagesCounter { get; set; }
 
         public SenderViewModel(INodeRepository nodeRepository, IAddressRepository addressRepository, IBluetoothMeshContext context, IEventAggregator eventAggregator)
         {
@@ -33,6 +35,7 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
             SelectedNode = new NodeModel(nodeRepository.Get(1));
             SelectedProcedureType = Procedure.DefaultTTL.ToString();
             SelectedMessageType = MessageType.GET.ToString();
+            SuccedMessagesCounter = 0;
 
         }
 
@@ -116,10 +119,12 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
 
         #region buttons
         public void IssueMessage()
-        {
+            {
+            //double percent = (SuccedMessagesCounter / 15) * 100;
+            SuccedMessagesCounter = 0;
+           
             eventAggregator.PublishOnUIThread(new ClearPathEvent());
-            //for (int i = 0; i < 30; i++)
-            //{
+                System.Threading.Thread.Sleep(1000);
 
                 var message = new BaseRequest();
                 message.Procedure = (Procedure)Enum.Parse(typeof(Procedure), SelectedProcedureType);
@@ -130,10 +135,38 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
 
                 var n = _nodeRepository.Get(SelectedNode.NodeId);
 
+                ConfigurationClientModel serverModel = (ConfigurationClientModel)n.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
+                serverModel.SendMessage(_context.NodeServers.FirstOrDefault(x => x.Node.Id == SelectedNode.NodeId), message);
+            
+            
+        }
+
+        public void IssueMessages()
+        {
+            double percent = (SuccedMessagesCounter / 15) * 100;
+            SuccedMessagesCounter = 0;
+            for (int i = 0; i < 15; i++)
+            {
+                eventAggregator.PublishOnUIThread(new ClearPathEvent());
+                System.Threading.Thread.Sleep(1000);
+
+                var message = new BaseRequest();
+                message.Procedure = (Procedure)Enum.Parse(typeof(Procedure), SelectedProcedureType);
+
+                message.MessageType = (MessageType)Enum.Parse(typeof(MessageType), SelectedMessageType);
+                message.Parameters = Parameters;
+                message.DST = SelectedAddress;
+
+                var n = _nodeRepository.Get(SelectedNode.NodeId);
 
                 ConfigurationClientModel serverModel = (ConfigurationClientModel)n.Elements[ElementType.primary].Models[ModelType.ConfigurationClient];
                 serverModel.SendMessage(_context.NodeServers.FirstOrDefault(x => x.Node.Id == SelectedNode.NodeId), message);
-            //}
+            }
+
+        }
+        public void Handle(SuccessfulMessage message)
+        {
+            SuccedMessagesCounter++;
         }
         #endregion
     }

@@ -43,10 +43,10 @@ namespace BluetoothMesh.Infrastructure.Handler
             {
                 ReceivedRequests.Add(incomingObject.RequestId);
             }
-            System.Threading.Thread.Sleep(100);
+            System.Threading.Thread.Sleep(10);
             Node.StatusFlag = 1;
 
-            Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeAddress.Value + "}");
+            //Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeAddress.Value + "}");
 
 
             if (incomingObject.Heartbeats >= 2 

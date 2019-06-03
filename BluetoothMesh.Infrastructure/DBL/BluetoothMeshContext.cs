@@ -16,15 +16,15 @@ namespace BluetoothMesh.Infrastructure.DBL
 
             Nodes = new List<Node>()
             {
-                new Node(1,new Posistion(1,1), new Features(){ Relay =  false, Proxy = true, Friend = false}, GetClient()),
-                new Node(2,new Posistion(2,10), new Features(){ Relay = false, Proxy = false, Friend = false}, GetLightBulb()),
-                new Node(3,new Posistion(8,6), new Features(){ Relay =  true, Proxy = false, Friend = false}),
-                new Node(4,new Posistion(3,13), new Features(){ Relay = false, Proxy = false, Friend = false }),
-                new Node(5,new Posistion(14,10), new Features(){ Relay =false, Proxy = false, Friend = false}, GetLightBulb()),
-                new Node(6,new Posistion(16,18), new Features(){ Relay =true, Proxy = false, Friend = false}),
-                new Node(7,new Posistion(24,16), new Features(){ Relay =false, Proxy = false, Friend = false }, GetLightBulb()),
-                new Node(8,new Posistion(36,18), new Features(){ Relay =true, Proxy = false, Friend = false}),
-                new Node(9,new Posistion(46,18), new Features(){ Relay =false, Proxy = false, Friend = false}),
+                new Node(1,new Posistion(1,1), new Features(){ Relay =  false, Proxy = true, Friend =  true}, GetClient()),
+                new Node(2,new Posistion(27,10), new Features(){ Relay = false, Proxy = false, Friend = true}, GetLightBulb()),
+                new Node(3,new Posistion(8,6), new Features(){ Relay =  true, Proxy = false, Friend =  true}),
+                new Node(4,new Posistion(3,13), new Features(){ Relay = false, Proxy = false, Friend = true }),
+                new Node(5,new Posistion(21,27), new Features(){ Relay =false, Proxy = false, Friend = true}, GetLightBulb()),
+                new Node(6,new Posistion(15,13), new Features(){ Relay =true, Proxy = false, Friend =  true}),
+                new Node(7,new Posistion(9,21), new Features(){ Relay =false, Proxy = false, Friend = true }, GetLightBulb()),
+                new Node(8,new Posistion(25,16), new Features(){ Relay =true, Proxy = false, Friend =  true}),
+                new Node(9,new Posistion(33,19), new Features(){ Relay =false, Proxy = false, Friend = true}),
 
             };
 

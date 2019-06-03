@@ -1,5 +1,7 @@
 ﻿using BluetoothMesh.Core.Domain.Models;
 using BluetoothMesh.Core.Domain.Requests;
+using Caliburn.Micro;
+using CommonServiceLocator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +28,8 @@ namespace BluetoothMesh.Core.Domain.Nodes.Elements.Models
         {
             if (message.MessageType == MessageType.STATUS)
             {
-
+                var eventAgregator = (IEventAggregator)ServiceLocator.Current.GetInstance(typeof(IEventAggregator));
+                eventAgregator.PublishOnUIThread(new SuccessfulMessage());
                 switch (message.Procedure)
                 {
                     case Procedure.DefaultTTL:
