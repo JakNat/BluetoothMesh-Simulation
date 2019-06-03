@@ -38,6 +38,8 @@ namespace BluetoothMesh.UI.MVVM
             builder.RegisterType<ShellViewModel>();
             builder.RegisterType<CanvaViewModel>();
             builder.RegisterType<SenderViewModel>();
+            builder.RegisterType<NodeDetailsViewModel>();
+
 
             builder.RegisterType<WindowManager>()
                 .AsImplementedInterfaces()

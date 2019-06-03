@@ -6,7 +6,36 @@
         xmlns:local="clr-namespace:BluetoothMesh.UI.MVVM.Views"
         mc:Ignorable="d"
         Title="NodeDetailsView" Height="450" Width="800">
-    <Grid>
-        
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+
+            <ColumnDefinition Width="10"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="10"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock  Grid.Column="1" Grid.Row="1"  Margin="5" Text="X"/>
+        <TextBox x:Name="ParameterX" Text="{Binding PositionX, Mode=TwoWay}" Margin="5" Grid.Column="2" Grid.Row="1" />
+
+        <TextBlock  Grid.Column="1" Grid.Row="2"  Margin="5" Text="Y"/>
+        <TextBox x:Name="ParameterY" Text="{Binding PositionY, Mode=TwoWay}" Margin="5" Grid.Column="2" Grid.Row="2"/>
+
+        <Button x:Name="SaveChanges" Margin="10" Grid.Column="2" Grid.Row="3"
+                Content="Save"/>
+
     </Grid>
 </Window>

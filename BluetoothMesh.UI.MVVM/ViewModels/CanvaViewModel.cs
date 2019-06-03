@@ -1,9 +1,11 @@
-﻿using BluetoothMesh.Core.Repositories;
+﻿using BluetoothMesh.Core.Domain;
+using BluetoothMesh.Core.Repositories;
 using BluetoothMesh.Infrastructure.Handler;
 using BluetoothMesh.UI.MVVM.Models;
 using BluetoothMesh.UI.Providers;
 using Caliburn.Micro;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Media;
@@ -12,11 +14,16 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
 {
     public class CanvaViewModel : Screen, IHandle<NodeUpdate>
     {
+        public static Node PickedNode;
+
         #region privates
         private readonly INodeRepository _nodeRepository;
         private ObservableCollection<EllipseModel> _myNodes;
         private ObservableCollection<LineModel> _myLines;
         private readonly IEventAggregator _eventAggregator;
+        private readonly NodeDetailsViewModel _nodeDetailsViewModel;
+
+        private List<LineModel> path;
         #endregion
 
         #region public
@@ -42,13 +49,21 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
         public ObservableCollection<TextBlockModel> TextBlockModels { get; set; }
         #endregion
 
-        public CanvaViewModel(INodeRepository nodeRepository, IEventAggregator eventAggregator)
+        public CanvaViewModel(INodeRepository nodeRepository, IEventAggregator eventAggregator, NodeDetailsViewModel nodeDetailsViewModel)
         {
             _eventAggregator = eventAggregator;
+            _nodeDetailsViewModel = nodeDetailsViewModel;
             _nodeRepository = nodeRepository;
             _eventAggregator.Subscribe(this);
+            path = new List<LineModel>();
+            Draw();
+        }
+
+        private void Draw()
+        {
             MyNodes = new ObservableCollection<EllipseModel>();
             TextBlockModels = new ObservableCollection<TextBlockModel>();
+
             foreach (var node in _nodeRepository.GetAll())
             {
                 var mynode = new EllipseModel(node);
@@ -98,55 +113,77 @@ namespace BluetoothMesh.UI.MVVM.ViewModels
                     StrokeThickness = 0.5
                 };
                 MyLines.Add(line);
+
+                foreach (var item in path)
+                {
+                    MyLines.Add(item);
+                }
             }
         }
 
         public void NodeClicked(EllipseModel myNode)
         {
-
+            IWindowManager manager = new WindowManager();
+            _nodeDetailsViewModel.Node = myNode;
+            PickedNode = _nodeRepository.Get(myNode.Id);
+            
+            //manager.ShowWindow(_nodeDetailsViewModel, null, null);
         }
+
 
         public void Handle(NodeUpdate message)
         {
-            MyNodes = new ObservableCollection<EllipseModel>();
-            TextBlockModels = new ObservableCollection<TextBlockModel>();
-            foreach (var node in _nodeRepository.GetAll())
+            if (message.From.Value == 1)
             {
-                var mynode = new EllipseModel(node);
-                TextBlockModel textBlock = new TextBlockModel
-                {
-                    Text = node.Id.ToString(),
-                    X = node.Posistion.X * 10 - mynode.Height / 6,
-                    Y = node.Posistion.Y * 10 - mynode.Height / 3
-                };
-                TextBlockModels.Add(textBlock);
-
-                mynode.Fill = LayoutProvider.ColorPicker(node);
-                if (message.NodeId == node.Id)
-                {
-                    mynode.Height += 5;
-                    mynode.Width += 5;
-                }
-                MyNodes.Add(mynode);
+                path.Clear();
             }
-            seedMyLines();
-            var nodeFrom = MyNodes.FirstOrDefault(x => x.Name == Convert.ToString(message.From.Value));
-            var nodeTo = MyNodes.FirstOrDefault(x => x.Name == Convert.ToString(message.NodeId));
-
-            //var nodeFrom = _nodeRepository.GetAll().FirstOrDefault(x => x.Address.Value == message.From.Value);
-            //var nodeTo = _nodeRepository.GetAll().First(x => x.Id == message.NodeId);
-            LineModel line = new LineModel
+            Draw();
+            if (message.From != null)
             {
-                Stroke = Brushes.Gray,
+                var actualNode = MyNodes.FirstOrDefault(x => x.Id == message.NodeId);
+            actualNode.Height += 5;
+            actualNode.Width += 5;
 
-                X1 = nodeFrom.X + (nodeFrom.Width / 2),
-                Y1 = nodeFrom.Y + (nodeFrom.Height / 2),
-                X2 = nodeTo.X + (nodeTo.Width / 2),
-                Y2 = nodeTo.Y + (nodeTo.Height / 2),
+            //MyNodes = new ObservableCollection<EllipseModel>();
+            //TextBlockModels = new ObservableCollection<TextBlockModel>();
+            //foreach (var node in _nodeRepository.GetAll())
+            //{
+            //    var mynode = new EllipseModel(node);
+            //    TextBlockModel textBlock = new TextBlockModel
+            //    {
+            //        Text = node.Id.ToString(),
+            //        X = node.Posistion.X * 10 - mynode.Height / 6,
+            //        Y = node.Posistion.Y * 10 - mynode.Height / 3
+            //    };
+            //    TextBlockModels.Add(textBlock);
 
-                StrokeThickness = 3
-            };
-            MyLines.Add(line);
+            //    mynode.Fill = LayoutProvider.ColorPicker(node);
+            //    if (message.NodeId == node.Id)
+            //    {
+            //        mynode.Height += 5;
+            //        mynode.Width += 5;
+            //    }
+            //    MyNodes.Add(mynode);
+            //}
+            //seedMyLines();
+           
+                var nodeFrom = MyNodes.FirstOrDefault(x => x.Name == Convert.ToString(message.From.Value));
+                var nodeTo = MyNodes.FirstOrDefault(x => x.Name == Convert.ToString(message.NodeId));
+
+                LineModel line = new LineModel
+                {
+                    Stroke = Brushes.Gray,
+
+                    X1 = nodeFrom.X + (nodeFrom.Width / 2),
+                    Y1 = nodeFrom.Y + (nodeFrom.Height / 2),
+                    X2 = nodeTo.X + (nodeTo.Width / 2),
+                    Y2 = nodeTo.Y + (nodeTo.Height / 2),
+
+                    StrokeThickness = 3
+                };
+                path.Add(line);
+                MyLines.Add(line);
+            }
         }
     }
 }

@@ -43,7 +43,7 @@ namespace BluetoothMesh.Infrastructure.Handler
             {
                 ReceivedRequests.Add(incomingObject.RequestId);
             }
-            System.Threading.Thread.Sleep(1500);
+            System.Threading.Thread.Sleep(100);
             Node.StatusFlag = 1;
 
             Console.WriteLine("Node nr " + Node.Id + " get message from {Node " + incomingObject.BroadCastingNodeAddress.Value + "}");

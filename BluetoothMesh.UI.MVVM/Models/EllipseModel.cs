@@ -6,6 +6,7 @@ namespace BluetoothMesh.UI.MVVM.Models
 {
     public class EllipseModel
     {
+        public int Id { get; set; }
         public double Width { get; set; }
         public double Height { get; set; }
         public Brush Fill { get; set; }
@@ -15,6 +16,7 @@ namespace BluetoothMesh.UI.MVVM.Models
 
         public EllipseModel(Node node)
         {
+            Id = node.Id;
             Width = 25;
             Height = 25;
             Fill = Brushes.White;

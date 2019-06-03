@@ -4,6 +4,10 @@ namespace BluetoothMesh.UI.MVVM.Models
 {
     public class NodeModel
     {
+        public NodeModel()
+        {
+                
+        }
         public NodeModel(Node node)
         {
             NodeId = node.Id;

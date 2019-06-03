@@ -24,5 +24,10 @@ namespace BluetoothMesh.UI.MVVM.Views
         {
             InitializeComponent();
         }
+
+        private void Ellipse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
